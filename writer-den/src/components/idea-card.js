@@ -1,4 +1,33 @@
+import { useState, useEffect } from "react";
+
 export default function Ideacard() {
+  const [ideas, setIdeas] = useState([]);
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+
+  const addIdea = () => {
+    const title = title.trim();
+    const content = content.trim();
+    if (title && content) {
+      fetch("ideasrecording/ideas", {
+        method: "POST",
+        body: JSON.stringify({
+          title,
+          content,
+        }),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      })
+        .then((response) => response.json)
+        .then((data) => {
+          setIdeas([...ideas, data]);
+          setTitle("");
+          setContent("");
+        });
+    }
+  };
+
   return (
     <div className='flex min-h-full flex-1 flex-col justifiy-center px-6 py-12 lg:px-8'>
       <div className='sm:mx-auto sm:w-full sm:max-w-sm'>
@@ -21,6 +50,8 @@ export default function Ideacard() {
                 id='title'
                 name='title'
                 type='text'
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
                 className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:eading-6'
               />
             </div>
@@ -28,16 +59,19 @@ export default function Ideacard() {
 
           <div>
             <label
-              htmlFor='idea'
+              htmlFor='content'
               className='block text-lg font-medium leading-6 text-white-900'
             >
               What's your idea?
             </label>
             <div className='mt-2'>
               <input
-                id='idea'
-                name='idea'
+                id='content'
+                name='content'
                 type='text'
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+                required
                 className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:eading-6'
               />
             </div>
@@ -46,6 +80,7 @@ export default function Ideacard() {
           <div>
             <button
               type='submit'
+              onClick={addIdea}
               className='flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
             >
               Save idea
