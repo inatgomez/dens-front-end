@@ -1,16 +1,78 @@
 /** @type {import('tailwindcss').Config} */
+
+// const defaultTheme = require("tailwindcss/defaultTheme");
+
 module.exports = {
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    extend: {
-      colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+    colors: {
+      primary: {
+        10: "#010205",
+        20: "#051A33",
+        30: "#0F498F",
+        40: "#1460BD",
+        50: "#287ADD",
+        60: "#468EE7",
+        70: "#71AAEF",
+        80: "#A3CAFA",
+        90: "#D4E6FC",
+        98: "#F5F9FE",
       },
+      secondary: {
+        10: "#050A39",
+        20: "#0B1465",
+        30: "#142090",
+        40: "#1B2BBB",
+        50: "#2E3FDC",
+        60: "#5362EA",
+        70: "#7D89F2",
+        80: "#ABB3F7",
+        90: "#DADDFB",
+        98: "#F6F7FE",
+      },
+      tertiary: {
+        10: "#062732",
+        20: "#0C4B5F",
+        30: "#11708D",
+        40: "#1992B8",
+        50: "#28B2DD",
+        60: "#50C3E7",
+        70: "#7CD3EE",
+        80: "#A9E2F4",
+        90: "#D6F2FA",
+        98: "#F6FCFE",
+      },
+      neutral: {
+        10: "#101519",
+        20: "#252E37",
+        30: "#3B4854",
+        40: "#4E6273",
+        50: "#647C90",
+        60: "#8395A5",
+        70: "#9FAEBC",
+        80: "#BDC8D1",
+        90: "#DAE1E7",
+        98: "#F8FAFB",
+      },
+      "validation-color": "#15bc20",
+      "error-color": "#ba1c17",
     },
+    fontSize: {
+      sm: "0.8rem",
+      base: "1rem",
+      xl: "1.25rem",
+      "2xl": "1.5rem",
+      "3xl": "1.875rem",
+      "4xl": "2.5rem",
+      "5xl": "3rem",
+    },
+    extend: {},
   },
-  plugins: [],
+  plugins: [
+    require("@tailwindcss/aspect-ratio"),
+    require("@tailwindcss/forms"),
+  ],
 };
