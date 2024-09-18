@@ -7,7 +7,7 @@ export default function ProjectForm() {
             New Project
           </h2>
 
-          <div className='mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6'>
+          <div className='mt-10 grid grid-cols-1 gap-x-6 gap-y-8'>
             <div className='sm:col-span-full'>
               <label
                 htmlFor='project-title'
@@ -73,6 +73,13 @@ export default function ProjectForm() {
                 </select>
               </div>
             </div>
+
+            <button
+              type='submit'
+              className='flex w-full justify-center rounded-md bg-tertiary-60 px-3 py-1.5 text-sm font-semibold leading-6 text-neutral-10 shadow-sm hover:bg-tertiary-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-tertiary-60'
+            >
+              Save project
+            </button>
           </div>
         </div>
       </div>
