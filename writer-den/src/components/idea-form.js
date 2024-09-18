@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { lusitana } from "@/assets/fonts/fonts";
 
-export default function Ideacard() {
+export default function IdeaForm() {
   const [ideas, setIdeas] = useState([]);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");

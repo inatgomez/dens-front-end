@@ -6,11 +6,11 @@ import {
   MenuItems,
   Button,
 } from "@headlessui/react";
-import { BellIcon, UserIcon } from "@heroicons/react/24/outline";
+import { BellIcon, UserCircleIcon } from "@heroicons/react/24/outline";
 
 export default function Navbar() {
   return (
-    <Disclosure as='nav' className='bg-primary-10'>
+    <Disclosure as='nav' className='bg-neutral-10'>
       <div className='mx-auto max-w-7xl px-2 sm:px-6 lg:px-8'>
         <div className='relative flex h-16 items-center justify-between'>
           <Button className='rounded-md bg-primary-80 py-1.5 px-3 text-sm/6 font-semibold text-neutral-10 shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-primary-70 data-[open]:bg-primary-70 data-[focus]:outline-1 data-[focus]:outline-primary-80'>
@@ -29,10 +29,13 @@ export default function Navbar() {
             {/* Profile dropdown */}
             <Menu as='div' className='relative ml-3'>
               <div>
-                <MenuButton className='relative flex rounded-full bg-neutral-30 text-neutral-98 text-sm focus:outline-none focus:ring-2 focus:ring-neutral-98 focus:ring-offset-2 focus:ring-offset-neutral-50'>
+                <MenuButton className='relative flex'>
                   <span className='absolute -inset-1.5' />
                   <span className='sr-only'>Open user menu</span>
-                  <UserIcon aria-hidden='true' className='h-8 w-8' />
+                  <UserCircleIcon
+                    aria-hidden='true'
+                    className='h-10 w-10 text-neutral-98'
+                  />
                 </MenuButton>
               </div>
               <MenuItems
