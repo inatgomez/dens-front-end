@@ -7,20 +7,23 @@ export default function SideBar() {
       <div className='mb-2 p-4 border-b-2 border-neutral-98'>
         <h1 className='text-neutral-98 text-bold text-xl'>Writer's Den</h1>
       </div>
-      <div className='flex justify-start mt-3'>
-        <Button className='flex justify-between items-center rounded-md py-1.5 px-3 text-sm/6 font-semibold text-neutral-98 data-[hover]:bg-neutral-50 data-[open]:bg-neutral-70 data-[focus]:outline-1 data-[focus]:outline-neutral-98 h-8'>
+      <div className='mt-3 py-1.5 px-3 rounded-md h-8 hover:bg-neutral-50'>
+        <a
+          href='#'
+          className='flex justify-start items-center text-sm font-semibold leading-6 text-neutral-98'
+        >
           <HomeIcon
             aria-hidden='true'
             className='mr-1 h-5 w-5 text-neutral-98'
           />
           Home
-        </Button>
+        </a>
       </div>
-      <div className='flex justify-start mt-3'>
-        <Button className='flex justify-between items-center rounded-md py-1.5 px-3 text-sm/6 font-semibold text-neutral-98 data-[hover]:bg-neutral-50 data-[open]:bg-neutral-50 data-[focus]:outline-1 data-[focus]:outline-neutral-98 h-8'>
+      <div className='mt-3 py-1.5 px-3 rounded-md h-8 hover:bg-neutral-50'>
+        <Button className='flex justify-between items-center text-sm font-semibold leading-6 text-neutral-98'>
           <PlusCircleIcon
             aria-hidden='true'
-            className='mr-1 h-5 w-5 text-neutrtal-98'
+            className='mr-1 h-5 w-5 text-neutral-98'
           />
           New Project
         </Button>
