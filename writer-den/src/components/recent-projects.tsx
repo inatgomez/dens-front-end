@@ -1,3 +1,5 @@
+import { useState, useEffect } from "react";
+
 const projects = [
   {
     id: 1,

@@ -1,6 +1,5 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { lusitana } from "@/assets/fonts/fonts";
 
 export default function IdeaForm() {
   const [ideas, setIdeas] = useState([]);
@@ -11,7 +10,7 @@ export default function IdeaForm() {
     const title = title.trim();
     const content = content.trim();
     if (title && content) {
-      fetch("ideasrecording/ideas", {
+      fetch("/ideasrecording/ideas", {
         method: "POST",
         body: JSON.stringify({
           title,
