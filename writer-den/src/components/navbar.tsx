@@ -13,17 +13,13 @@ import {
   PlusCircleIcon,
   MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
+import NewIdeaButton from "./new-idea-button";
 
 export default function Navbar() {
   return (
     <div className='bg-neutral-10'>
       <nav aria-label='Global' className='grid grid-cols-3 p-6 lg:px-8 mx-auto'>
-        <div className='flex lg:flex-1 justify-start mt-3'>
-          <Button className='flex justify-between items-center rounded-md bg-primary-80 py-1.5 px-3 text-sm/6 font-semibold text-neutral-10 shadow-inner shadow-primary-60 focus:outline-none data-[hover]:bg-primary-70 data-[open]:bg-primary-70 data-[focus]:outline-1 data-[focus]:outline-primary-80 h-12'>
-            <PlusCircleIcon aria-hidden='true' className='mr-1 h-6 w-6' />
-            New Note
-          </Button>
-        </div>
+        <NewIdeaButton />
         <div className='flex justify-center items-center mt-3 w-full py-1.5 px-3'>
           <MagnifyingGlassIcon
             aria-hidden='true'
