@@ -1,6 +1,7 @@
 import React from "react";
 import { Button } from "@headlessui/react";
 import { HomeIcon, PlusCircleIcon } from "@heroicons/react/24/outline";
+import NewProjectButton from "./new-project-button";
 
 export default function SideBar() {
   return (
@@ -20,15 +21,7 @@ export default function SideBar() {
           Home
         </a>
       </div>
-      <div className='mt-3 py-1.5 px-3 rounded-md h-8 hover:bg-neutral-50'>
-        <Button className='flex justify-between items-center text-sm font-semibold leading-6 text-neutral-98'>
-          <PlusCircleIcon
-            aria-hidden='true'
-            className='mr-1 h-5 w-5 text-neutral-98'
-          />
-          New Project
-        </Button>
-      </div>
+      <NewProjectButton />
       <div className='mt-3 border-t-2 border-neutral-98'>
         <div className='my-1 py-1.5 px-3 rounded-md h-8 hover:bg-neutral-50'>
           <a
