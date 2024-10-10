@@ -7,14 +7,14 @@ export default function IdeaForm() {
   const [content, setContent] = useState("");
 
   const addIdea = () => {
-    const title = title.trim();
-    const content = content.trim();
-    if (title && content) {
+    const ideaTitle: string = title.trim();
+    const ideaContent: string = content.trim();
+    if (ideaTitle && ideaContent) {
       fetch("/ideasrecording/ideas", {
         method: "POST",
         body: JSON.stringify({
-          title,
-          content,
+          ideaTitle,
+          ideaContent,
         }),
         headers: {
           "Content-type": "application/json; charset=UTF-8",
