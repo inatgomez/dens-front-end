@@ -8,7 +8,7 @@ export default function RootLayout({ children }) {
       <body className={`${inter.className} antialiased flex flex-col h-screen`}>
         <Navbar />
         <div className='grid grid-cols-5 w-screen'>
-          <SideBar className='col-span-1' />
+          <SideBar />
           <div className='flex flex-col col-span-4'>{children}</div>
         </div>
       </body>
