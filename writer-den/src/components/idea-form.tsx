@@ -86,14 +86,6 @@ export default function IdeaForm() {
                 Save idea
               </button>
             </div>
-            <div>
-              <button
-                type='cancel'
-                className='flex w-full justify-center rounded-md bg-neutral-70 px-3 py-1.5 text-sm font-semibold leading-6 text-neutral-10 shadow-sm hover:bg-neutral-60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-70'
-              >
-                Cancel
-              </button>
-            </div>
           </form>
         </div>
       </div>
