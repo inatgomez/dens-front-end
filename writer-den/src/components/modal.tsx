@@ -8,7 +8,7 @@ import {
 import { useState } from "react";
 
 interface Props {
-  children: ReactNode;
+  children: React.ReactNode;
   title: string;
 }
 

@@ -31,7 +31,7 @@ export default function IdeaForm() {
   };
 
   return (
-    <Modal title={"New idea"}>
+    <Modal title='New idea'>
       <div className='mt-10 grid grid-cols-1 gap-x-6 gap-y-8'>
         <form action='#' method='POST' className='space-y-6'>
           <div>

@@ -2,7 +2,7 @@ import React from "react";
 import Modal from "./modal";
 export default function ProjectForm() {
   return (
-    <Modal title={"Create new project"}>
+    <Modal title='Create new project'>
       <form>
         <div className='mt-10 grid grid-cols-1 gap-x-6 gap-y-8'>
           <div className='sm:col-span-full'>
