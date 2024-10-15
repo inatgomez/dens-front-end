@@ -4,17 +4,14 @@ import {
   MenuButton,
   MenuItem,
   MenuItems,
-  Button,
   Input,
 } from "@headlessui/react";
 import {
   BellIcon,
   UserCircleIcon,
-  PlusCircleIcon,
   MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
 import NewIdeaButton from "./new-idea-button";
-
 export default function Navbar() {
   return (
     <div className='bg-neutral-10'>

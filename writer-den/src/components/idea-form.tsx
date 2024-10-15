@@ -1,6 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import Modal from "./modal";
+import { useModal } from "@/context/modal-context";
 
 export default function IdeaForm() {
   const [ideas, setIdeas] = useState([]);
@@ -30,8 +31,10 @@ export default function IdeaForm() {
     }
   };
 
+  const { isIdeaModalOpen, closeIdeaModal } = useModal();
+
   return (
-    <Modal title='New idea'>
+    <Modal title='New Idea' isOpen={isIdeaModalOpen} onClose={closeIdeaModal}>
       <div className='mt-10 grid grid-cols-1 gap-x-6 gap-y-8'>
         <form action='#' method='POST' className='space-y-6'>
           <div>

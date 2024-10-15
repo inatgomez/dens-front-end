@@ -1,8 +1,15 @@
 import React from "react";
 import Modal from "./modal";
+import { useModal } from "@/context/modal-context";
 export default function ProjectForm() {
+  const { isProjectModalOpen, closeProjectModal } = useModal();
+
   return (
-    <Modal title='Create new project'>
+    <Modal
+      title='New Project'
+      isOpen={isProjectModalOpen}
+      onClose={closeProjectModal}
+    >
       <form>
         <div className='mt-10 grid grid-cols-1 gap-x-6 gap-y-8'>
           <div className='sm:col-span-full'>

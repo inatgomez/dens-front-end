@@ -1,10 +1,14 @@
-import IdeaForm from "@/components/idea-form";
 import ProjectsList from "@/components/list-projects";
 import Navbar from "@/components/navbar";
 import RecentProjects from "@/components/recent-projects";
 import SideBar from "@/components/sidebar";
+import IdeaForm from "@/components/idea-form";
+import ProjectForm from "@/components/project-form";
+import { useModal } from "@/context/modal-context";
 
 export default function Home() {
+  const { isIdeaModalOpen, isProjectModalOpen } = useModal();
+
   return (
     <div className='flex flex-col min-h-screen'>
       <Navbar />
@@ -15,6 +19,9 @@ export default function Home() {
           <ProjectsList />
         </div>
       </div>
+
+      {isIdeaModalOpen && <IdeaForm />}
+      {isProjectModalOpen && <ProjectForm />}
     </div>
   );
 }

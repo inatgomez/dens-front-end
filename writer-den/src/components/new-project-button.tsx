@@ -1,15 +1,15 @@
 import React from "react";
 import { Button } from "@headlessui/react";
 import { PlusCircleIcon } from "@heroicons/react/24/outline";
+import { useModal } from "@/context/modal-context";
 
 export default function NewProjectButton() {
-  function handleClick() {
-    alert("You clicked new project!");
-  }
+  const { openProjectModal } = useModal();
+
   return (
     <div className='mt-3 py-1.5 px-3 rounded-md h-8 hover:bg-neutral-50'>
       <Button
-        onClick={handleClick}
+        onClick={openProjectModal}
         className='flex justify-between items-center text-sm font-semibold leading-6 text-neutral-98'
       >
         <PlusCircleIcon

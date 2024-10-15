@@ -8,15 +8,19 @@ import {
 import { useState } from "react";
 
 interface Props {
-  children: React.ReactNode;
+  children: ReactNode;
   title: string;
+  isOpen: boolean;
+  onClose: () => void;
 }
 
-export default function Modal({ children, title }: Props) {
-  let [isOpen, setIsOpen] = useState(true);
-
+export default function Modal({ children, title, isOpen, onClose }: Props) {
   return (
-    <Dialog open={isOpen} onClose={() => setIsOpen(false)}>
+    <Dialog
+      open={isOpen}
+      onClose={onClose}
+      className='fixed inset-0 z-50 flex items-center justify-center'
+    >
       <DialogBackdrop className='fixed inset-0 bg-black/30' />
       <DialogPanel className='bg-secondary-10'>
         <div className='flex mx-auto min-h-full flex-1 flex-col justifiy-center max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8'>
