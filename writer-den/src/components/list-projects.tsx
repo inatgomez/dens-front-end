@@ -1,52 +1,29 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { getProjects } from "@/services/projectService";
 
-const projects = [
-  {
-    id: 1,
-    name: "Alien alchemy",
-    href: "#",
-    imageSrc: "",
-    imageAlt: "",
-  },
-  {
-    id: 2,
-    name: "The Cliff",
-    href: "#",
-    imageSrc: "",
-    imageAlt: "",
-  },
-  {
-    id: 3,
-    name: "The road to mastery",
-    href: "#",
-    imageSrc: "",
-    imageAlt: "",
-  },
-  {
-    id: 4,
-    name: "Personal brand",
-    href: "#",
-    imageSrc: "",
-    imageAlt: "",
-  },
-  {
-    id: 5,
-    name: "SWE Projects",
-    href: "#",
-    imageSrc: "",
-    imageAlt: "",
-  },
-  {
-    id: 6,
-    name: "Running out of names",
-    href: "#",
-    imageSrc: "",
-    imageAlt: "",
-  },
-  // More projects...
-];
+interface Project {
+  unique_id: string;
+  name: string;
+  main_genre: string;
+  created_at: string;
+  message?: string;
+}
 
 export default function ProjectsList() {
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchProjects() {
+      const data = await getProjects();
+      setProjects(data);
+      setLoading(false);
+    }
+    fetchProjects();
+  }, []);
+
+  if (loading) return <p className='text-base text-neutral-98'>Loading...</p>;
+
   return (
     <div className='bg-neutral-10 min-h-screen'>
       <div className='mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8'>
@@ -54,15 +31,27 @@ export default function ProjectsList() {
 
         <div className='mt-4 grid grid-cols-6 gap-x-6 gap-y-10 xl:gap-x-8'>
           {projects.map((project) => (
-            <a key={project.id} href={project.href} className='group'>
-              <div className='aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-neutral-40 xl:aspect-h-8 xl:aspect-w-7'>
-                <img
-                  alt={project.imageAlt}
-                  src={project.imageSrc}
-                  className='h-full w-full object-cover object-center group-hover:opacity-75'
-                />
+            <a
+              key={project.unique_id || project.message}
+              href='#'
+              className='group'
+            >
+              <div className='aspect-h-1 aspect-w-1 max-w-xs overflow-hidden rounded-lg bg-primary-50/70 shadow-sm shadow-primary-70 xl:aspect-h-7 xl:aspect-w-7'>
+                <h2 className='mt-4 text-xl text-neutral-98 p-1'>
+                  {project.name || project.message}
+                </h2>
+                {project.main_genre && (
+                  <p className='text-base text-neutral-90 p-1'>
+                    Genre: {project.main_genre}
+                  </p>
+                )}
+                {project.created_at && (
+                  <p className='text-base text-neutral-90 p-1'>
+                    Created on:
+                    {new Date(project.created_at).toLocaleDateString()}
+                  </p>
+                )}
               </div>
-              <h2 className='mt-4 text-sm text-neutral-98'>{project.name}</h2>
             </a>
           ))}
         </div>
