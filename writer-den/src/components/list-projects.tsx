@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { getProjects } from "@/services/projectService";
+import Link from "next/link";
 
 interface Project {
   unique_id: string;
   name: string;
   main_genre: string;
+  mix_genre: string;
   created_at: string;
   message?: string;
 }
@@ -26,14 +28,14 @@ export default function ProjectsList() {
 
   return (
     <div className='bg-neutral-10 min-h-screen'>
-      <div className='mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8'>
-        <h2 className='text-neutral-98 font-bold'>Fiction</h2>
+      <div className='mx-auto max-w-2xl px-4 py-4 sm:px-6 sm:py-8 lg:max-w-7xl lg:px-8'>
+        <h2 className='text-xl text-neutral-98 font-bold'>Projects</h2>
 
         <div className='mt-4 grid grid-cols-6 gap-x-6 gap-y-10 xl:gap-x-8'>
           {projects.map((project) => (
-            <a
+            <Link
               key={project.unique_id || project.message}
-              href='#'
+              href={`/projects/${project.unique_id}`}
               className='group'
             >
               <div className='max-h-40 max-w-sm overflow-hidden rounded-lg bg-primary-50/70 shadow-sm shadow-primary-70 p-4'>
@@ -42,7 +44,7 @@ export default function ProjectsList() {
                 </h2>
                 {project.main_genre && (
                   <p className='text-base text-neutral-98'>
-                    Genre: {project.main_genre}
+                    {project.main_genre}, {project.mix_genre}
                   </p>
                 )}
                 {project.created_at && (
@@ -52,7 +54,7 @@ export default function ProjectsList() {
                   </p>
                 )}
               </div>
-            </a>
+            </Link>
           ))}
         </div>
       </div>
