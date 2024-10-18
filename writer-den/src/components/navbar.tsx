@@ -1,32 +1,23 @@
+import React from "react";
 import {
   Menu,
   MenuButton,
   MenuItem,
   MenuItems,
-  Button,
   Input,
 } from "@headlessui/react";
 import {
   BellIcon,
   UserCircleIcon,
-  PlusCircleIcon,
   MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
-
+import NewIdeaButton from "./new-idea-button";
 export default function Navbar() {
   return (
     <div className='bg-neutral-10'>
-      <nav
-        aria-label='Global'
-        className='flex items-center justify-between p-6 lg:px-8 mx-auto h-16'
-      >
-        <div className='flex lg:flex-1'>
-          <Button className='flex justify-between items-center rounded-md bg-primary-80 py-1.5 px-3 text-sm/6 font-semibold text-neutral-10 shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-primary-70 data-[open]:bg-primary-70 data-[focus]:outline-1 data-[focus]:outline-primary-80'>
-            <PlusCircleIcon aria-hidden='true' className='mr-1 h-6 w-6' />
-            New Note
-          </Button>
-        </div>
-        <div className='flex justify-center items-center'>
+      <nav aria-label='Global' className='grid grid-cols-3 p-6 lg:px-8 mx-auto'>
+        <NewIdeaButton />
+        <div className='flex justify-center items-center mt-3 w-full py-1.5 px-3'>
           <MagnifyingGlassIcon
             aria-hidden='true'
             className='mr-2 h-10 w-10 text-neutral-98'
@@ -34,10 +25,11 @@ export default function Navbar() {
           <Input
             name='search'
             type='text'
-            className='mt-3 block w-full rounded-2xl border-2 bg-neutral-30 py-1.5 px-3 text-sm/6 text-neutral-98 focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-neutral-98'
+            placeholder='Search'
+            className='block w-full text-sm/6 text-neutral-98 rounded-3xl bg-neutral-30 data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-neutral-98'
           />
         </div>
-        <div className='flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0'>
+        <div className='flex items-center justify-end mt-3 pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0'>
           <button
             type='button'
             className='relative rounded-full bg-neutral-30 p-1 text-neutral-98 hover:text-neutral-98 focus:outline-none focus:ring-2 focus:ring-neutral-98 focus:ring-offset-2 focus:ring-offset-neutral-50'
