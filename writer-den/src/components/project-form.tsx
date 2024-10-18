@@ -14,8 +14,8 @@ export default function ProjectForm() {
 
     const projectData = {
       name,
-      main_genre: mainGenre,
-      mix_genre: otherGenre,
+      main_genre: mainGenre.toUpperCase(),
+      mix_genre: otherGenre === "None" ? "" : otherGenre.toUpperCase(),
     };
 
     try {
@@ -68,16 +68,16 @@ export default function ProjectForm() {
                 onChange={(e) => setMainGenre(e.target.value)}
                 className='block w-full rounded-md border-0 py-1.5 text-neutral-10 shadow-sm ring-1 ring-inset ring-neutral-70 placeholder:text-neutral-40 focus:ring-2 focus:ring-inset focus:ring-primary-40 sm:text-sm sm:leading-6'
               >
-                <option>ROMANCE</option>
-                <option>MISTERY</option>
-                <option>SCI-FI</option>
-                <option>FANTASY</option>
-                <option>ACTION</option>
-                <option>DRAMA</option>
-                <option>DETECTIVE</option>
-                <option>HORROR</option>
-                <option>COMING OF AGE</option>
-                <option>COMEDY</option>
+                <option>Romance</option>
+                <option>Mistery</option>
+                <option>Sci-Fi</option>
+                <option>Fantasy</option>
+                <option>Action</option>
+                <option>Drama</option>
+                <option>Detective</option>
+                <option>Horror</option>
+                <option>Coming of age</option>
+                <option>Comedy</option>
               </select>
             </div>
           </div>
@@ -96,16 +96,17 @@ export default function ProjectForm() {
                 onChange={(e) => setOtherGenre(e.target.value)}
                 className='block w-full rounded-md border-0 py-1.5 text-neutral-10 shadow-sm ring-1 ring-inset ring-neutral-70 placeholder:text-neutral-40 focus:ring-2 focus:ring-inset focus:ring-primary-40 sm:text-sm sm:leading-6'
               >
-                <option>ROMANCE</option>
-                <option>MISTERY</option>
-                <option>SCI-FI</option>
-                <option>FANTASY</option>
-                <option>ACTION</option>
-                <option>DRAMA</option>
-                <option>DETECTIVE</option>
-                <option>HORROR</option>
-                <option>COMING OF AGE</option>
-                <option>COMEDY</option>
+                <option>Romance</option>
+                <option>Mistery</option>
+                <option>Sci-Fi</option>
+                <option>Fantasy</option>
+                <option>Action</option>
+                <option>Drama</option>
+                <option>Detective</option>
+                <option>Horror</option>
+                <option>Coming of age</option>
+                <option>Comedy</option>
+                <option>None</option>
               </select>
             </div>
           </div>
