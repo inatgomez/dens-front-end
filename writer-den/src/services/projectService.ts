@@ -24,7 +24,7 @@ export async function createProject(projectData: {
 }) {
   try {
     const response = await fetch(
-      "http://localhost:8000/ideasrecording/projects",
+      "http://localhost:8000/ideasrecording/projects/",
       {
         method: "POST",
         headers: {

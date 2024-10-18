@@ -40,11 +40,11 @@ export default function ProjectForm() {
               htmlFor='project-title'
               className='block text-base font-medium leading-6 text-neutral-98'
             >
-              Title
+              Project Name
             </label>
             <div className='mt-2'>
               <input
-                id='project-title'
+                id='name'
                 type='text'
                 value={name}
                 onChange={(e) => setName(e.target.value)}
@@ -68,13 +68,16 @@ export default function ProjectForm() {
                 onChange={(e) => setMainGenre(e.target.value)}
                 className='block w-full rounded-md border-0 py-1.5 text-neutral-10 shadow-sm ring-1 ring-inset ring-neutral-70 placeholder:text-neutral-40 focus:ring-2 focus:ring-inset focus:ring-primary-40 sm:text-sm sm:leading-6'
               >
-                <option>Sci-Fi</option>
-                <option>Romance</option>
-                <option>Fantasy</option>
-                <option>Mistery</option>
-                <option>Comedy</option>
-                <option>Action</option>
-                <option>Drama</option>
+                <option>ROMANCE</option>
+                <option>MISTERY</option>
+                <option>SCI-FI</option>
+                <option>FANTASY</option>
+                <option>ACTION</option>
+                <option>DRAMA</option>
+                <option>DETECTIVE</option>
+                <option>HORROR</option>
+                <option>COMING OF AGE</option>
+                <option>COMEDY</option>
               </select>
             </div>
           </div>
@@ -93,14 +96,16 @@ export default function ProjectForm() {
                 onChange={(e) => setOtherGenre(e.target.value)}
                 className='block w-full rounded-md border-0 py-1.5 text-neutral-10 shadow-sm ring-1 ring-inset ring-neutral-70 placeholder:text-neutral-40 focus:ring-2 focus:ring-inset focus:ring-primary-40 sm:text-sm sm:leading-6'
               >
-                <option>None</option>
-                <option>Sci-Fi</option>
-                <option>Romance</option>
-                <option>Fantasy</option>
-                <option>Mistery</option>
-                <option>Comedy</option>
-                <option>Action</option>
-                <option>Drama</option>
+                <option>ROMANCE</option>
+                <option>MISTERY</option>
+                <option>SCI-FI</option>
+                <option>FANTASY</option>
+                <option>ACTION</option>
+                <option>DRAMA</option>
+                <option>DETECTIVE</option>
+                <option>HORROR</option>
+                <option>COMING OF AGE</option>
+                <option>COMEDY</option>
               </select>
             </div>
           </div>
