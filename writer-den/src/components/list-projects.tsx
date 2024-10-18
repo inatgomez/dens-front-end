@@ -36,17 +36,17 @@ export default function ProjectsList() {
               href='#'
               className='group'
             >
-              <div className='aspect-h-1 aspect-w-1 max-w-xs overflow-hidden rounded-lg bg-primary-50/70 shadow-sm shadow-primary-70 xl:aspect-h-7 xl:aspect-w-7'>
-                <h2 className='mt-4 text-xl text-neutral-98 p-1'>
+              <div className='max-h-40 max-w-sm overflow-hidden rounded-lg bg-primary-50/70 shadow-sm shadow-primary-70 p-4'>
+                <h2 className='text-xl text-neutral-98'>
                   {project.name || project.message}
                 </h2>
                 {project.main_genre && (
-                  <p className='text-base text-neutral-90 p-1'>
+                  <p className='text-base text-neutral-98'>
                     Genre: {project.main_genre}
                   </p>
                 )}
                 {project.created_at && (
-                  <p className='text-base text-neutral-90 p-1'>
+                  <p className='text-sm text-neutral-90'>
                     Created on:
                     {new Date(project.created_at).toLocaleDateString()}
                   </p>
