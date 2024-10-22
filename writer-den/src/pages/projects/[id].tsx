@@ -50,7 +50,7 @@ export default function ProjectPage() {
         <div className='flex flex-col col-span-4 p-4 bg-neutral-10 min-h-screen'>
           <h1 className='text-3xl text-neutral-98 font-bold'>{project.name}</h1>
           <p className='text-xl text-neutral-98'>
-            Genres: {project.main_genre} / {project.mix_genre}
+            {project.main_genre} / {project.mix_genre}
           </p>
           <p className='text-sm text-neutral-90'>
             Created on: {new Date(project.created_at).toLocaleDateString()}
