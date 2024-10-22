@@ -5,6 +5,7 @@ import Navbar from "@/components/navbar";
 import SideBar from "@/components/sidebar";
 import ProjectForm from "@/components/project-form";
 import IdeaForm from "@/components/idea-form";
+import IdeasList from "@/components/list-ideas";
 import { useModal } from "@/context/modal-context";
 
 interface Project {
@@ -54,6 +55,7 @@ export default function ProjectPage() {
           <p className='text-sm text-neutral-90'>
             Created on: {new Date(project.created_at).toLocaleDateString()}
           </p>
+          <IdeasList />
         </div>
       </div>
 

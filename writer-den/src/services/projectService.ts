@@ -12,7 +12,7 @@ export async function getProjects() {
       ? data
       : [{ message: "You'll see your projects soon!" }];
   } catch (error) {
-    console.error("Error fetchin projects:", error);
+    console.error("Error fetching projects:", error);
     return [{ message: "Failed to load projects. Please try again later" }];
   }
 }
