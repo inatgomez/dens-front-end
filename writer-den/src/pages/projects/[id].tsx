@@ -55,7 +55,7 @@ export default function ProjectPage() {
           <p className='text-sm text-neutral-90'>
             Created on: {new Date(project.created_at).toLocaleDateString()}
           </p>
-          <IdeasList />
+          <IdeasList projectId={id as string} />
         </div>
       </div>
 

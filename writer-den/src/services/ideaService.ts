@@ -1,6 +1,8 @@
-export async function getIdeas() {
+export async function getIdeas(projectId: string) {
   try {
-    const response = await fetch("http://localhost:8000/ideasrecording/ideas/");
+    const response = await fetch(
+      `http://localhost:8000/ideasrecording/ideas/${projectId}`
+    );
     if (!response.ok) {
       throw new Error("Failed to fecth ideas.");
     }

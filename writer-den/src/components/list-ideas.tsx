@@ -12,18 +12,21 @@ interface Idea {
   message?: string;
 }
 
-export default function IdeasList() {
+interface IdeasListProps {
+  projectId: string;
+}
+export default function IdeasList({ projectId }: IdeasListProps) {
   const [ideas, setIdeas] = useState<Idea[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchIdeas() {
-      const data = await getIdeas();
+      const data = await getIdeas(projectId);
       setIdeas(data);
       setLoading(false);
     }
     fetchIdeas();
-  }, []);
+  }, [projectId]);
 
   if (loading) return <p className='text-base text-neutral-98'>Loading...</p>;
 
