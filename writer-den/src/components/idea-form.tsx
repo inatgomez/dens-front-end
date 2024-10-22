@@ -43,9 +43,9 @@ export default function IdeaForm() {
     };
 
     try {
-      await createIdea(ideaData);
+      await createIdea(selectedProject, ideaData);
       alert("Idea created successfully!");
-      closeIdeaModal;
+      closeIdeaModal();
     } catch (error) {
       alert("Failed to create idea. Please try again.");
     }

@@ -17,15 +17,17 @@ export async function getIdeas(projectId: string) {
   }
 }
 
-export async function createIdea(ideaData: {
-  title: string;
-  content: string;
-  category: string;
-  project_id: string;
-}) {
+export async function createIdea(
+  projectId: string,
+  ideaData: {
+    title: string;
+    content: string;
+    category: string;
+  }
+) {
   try {
     const response = await fetch(
-      "http://localhost:8000/ideasrecording/ideas/",
+      `http://localhost:8000/ideasrecording/ideas/${projectId}`,
       {
         method: "POST",
         headers: {
