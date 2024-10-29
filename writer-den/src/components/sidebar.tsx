@@ -1,11 +1,10 @@
 import React from "react";
-import { Button } from "@headlessui/react";
-import { HomeIcon, PlusCircleIcon } from "@heroicons/react/24/outline";
+import { HomeIcon } from "@heroicons/react/24/outline";
 import NewProjectButton from "./new-project-button";
 
 export default function SideBar() {
   return (
-    <div className='flex flex-col justify-start items-stretch bg-neutral-10 w-full p-4'>
+    <div className='flex flex-col justify-start items-stretch bg-primary-10 w-full p-4'>
       <div className='mb-2 p-4 border-b-2 border-neutral-98'>
         <h1 className='text-neutral-98 text-bold text-xl'>Writer's Den</h1>
       </div>

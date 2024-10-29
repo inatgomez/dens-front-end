@@ -1,17 +1,21 @@
 import { inter } from "../assets/fonts/fonts";
-import Navbar from "@/components/navbar";
 import SideBar from "@/components/sidebar";
 
-export default function RootLayout({ children }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html lang='en'>
-      <body className={`${inter.className} antialiased flex flex-col h-screen`}>
-        <Navbar />
-        <div className='grid grid-cols-5 w-screen'>
-          <SideBar />
-          <div className='flex flex-col col-span-4'>{children}</div>
-        </div>
-      </body>
-    </html>
+    <div
+      className={`bg-primary-10 flex flex-col min-h-screen ${inter.className} antialiased`}
+    >
+      <div className='grid grid-cols-5 w-screen'>
+        <SideBar />
+        <main className='bg-neutral-10 flex flex-col col-span-4'>
+          {children}
+        </main>
+      </div>
+    </div>
   );
 }
