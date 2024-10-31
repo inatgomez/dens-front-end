@@ -1,17 +1,17 @@
 import ProjectsList from "@/components/list-projects";
 import IdeaForm from "@/components/idea-form";
 import ProjectForm from "@/components/project-form";
-import RootLayout from "@/components/root-layout";
+import Layout from "@/components/layout";
 import { useModal } from "@/context/modal-context";
 
-export default function Home() {
+export default function App() {
   const { isIdeaModalOpen, isProjectModalOpen } = useModal();
 
   return (
-    <RootLayout>
+    <Layout>
       <ProjectsList />
       {isIdeaModalOpen && <IdeaForm />}
       {isProjectModalOpen && <ProjectForm />}
-    </RootLayout>
+    </Layout>
   );
 }
