@@ -8,7 +8,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar-2";
+} from "@/components/ui/sidebar";
 
 const items = [
   {
@@ -35,7 +35,7 @@ const items = [
 
 export function AppSidebar() {
   return (
-    <Sidebar>
+    <Sidebar variant='inset' collapsible='icon'>
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent>
