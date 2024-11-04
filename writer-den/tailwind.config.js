@@ -17,12 +17,19 @@ module.exports = {
       "5xl": "3rem",
     },
     extend: {
+      fontFamily: {
+        sans: ["Inter", "sans-serif"],
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
       colors: {
+        background: {
+          DEFAULT: "hsl(var(--background))",
+          secondary: "hsl(var(--secondary))",
+        },
         sidebar: {
           DEFAULT: "hsl(var(--background))",
           foreground: "hsl(var(--foreground))",
