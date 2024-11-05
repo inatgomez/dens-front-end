@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 
-import RootLayout from "@/components/root-layout";
+import Layout from "@/components/layout";
 import ProjectForm from "@/components/project-form";
 import IdeaForm from "@/components/idea-form";
 import IdeasList from "@/components/list-ideas";
@@ -42,7 +42,7 @@ export default function ProjectPage() {
     return <p className='text-base text-neutral-98'>Project not found</p>;
 
   return (
-    <RootLayout>
+    <Layout>
       <div className='flex flex-col col-span-4 p-4 bg-neutral-10 min-h-screen'>
         <h1 className='text-3xl text-neutral-98 font-bold'>{project.name}</h1>
         <p className='text-xl text-neutral-98'>
@@ -56,6 +56,6 @@ export default function ProjectPage() {
 
       {isIdeaModalOpen && <IdeaForm />}
       {isProjectModalOpen && <ProjectForm />}
-    </RootLayout>
+    </Layout>
   );
 }

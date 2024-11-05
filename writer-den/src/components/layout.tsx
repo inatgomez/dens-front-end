@@ -8,7 +8,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <main>
+        <main className='bg-background-secondary md:rounded-sm'>
           <SidebarTrigger />
           {children}
         </main>
