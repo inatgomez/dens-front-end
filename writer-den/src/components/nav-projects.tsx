@@ -1,7 +1,12 @@
 import * as React from "react";
 import { getProjects } from "@/services/projectService";
 import Link from "next/link";
-import { SidebarMenu, SidebarMenuItem, SidebarMenuButton } from "./ui/sidebar";
+import {
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarMenuButton,
+  SidebarMenuSkeleton,
+} from "./ui/sidebar";
 import { FileText } from "lucide-react";
 
 interface Project {
@@ -10,20 +15,16 @@ interface Project {
   message?: string;
 }
 
-export default function NavProjects() {
+function NavProjects() {
   const [projects, setProjects] = React.useState<Project[]>([]);
-  const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
     async function fetchProjects() {
       const data = await getProjects();
       setProjects(data);
-      setLoading(false);
     }
     fetchProjects();
   }, []);
-
-  if (loading) return <p className='text-base text-slate-50'>Loading...</p>;
 
   return (
     <SidebarMenu>
@@ -43,3 +44,17 @@ export default function NavProjects() {
     </SidebarMenu>
   );
 }
+
+function NavProjectsSkeleton() {
+  return (
+    <SidebarMenu>
+      {Array.from({ length: 5 }).map((_, index) => (
+        <SidebarMenuItem key={index}>
+          <SidebarMenuSkeleton showIcon />
+        </SidebarMenuItem>
+      ))}
+    </SidebarMenu>
+  );
+}
+
+export { NavProjects, NavProjectsSkeleton };

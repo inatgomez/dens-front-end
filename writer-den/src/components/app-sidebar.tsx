@@ -27,9 +27,10 @@ import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 
-import NavProjects from "./nav-projects";
+import { NavProjects, NavProjectsSkeleton } from "./nav-projects";
 
 import { ChevronUp, User2 } from "lucide-react";
+import * as React from "react";
 
 const items = [
   {
@@ -85,7 +86,9 @@ export function AppSidebar() {
             <Plus /> <span className='sr-only'>Add Project</span>
           </SidebarGroupAction>
           <SidebarGroupContent>
-            <NavProjects />
+            <React.Suspense fallback={<NavProjectsSkeleton />}>
+              <NavProjects />
+            </React.Suspense>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
