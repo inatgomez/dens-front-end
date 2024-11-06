@@ -16,7 +16,7 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "noImplicitAny": true,
-    "types": ["jest", "node"]
+    "types": ["jest", "node", "@testing-library/jest-dom"]
   },
   "include": ["next-env.d.ts", "src", "**/*.ts", "**/*.tsx", "next.config.mjs"],
   "exclude": ["node_modules"]
