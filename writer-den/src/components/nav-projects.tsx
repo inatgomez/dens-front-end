@@ -31,10 +31,7 @@ function NavProjects() {
       {projects.map((project) => (
         <SidebarMenuItem key={project.unique_id}>
           <SidebarMenuButton asChild>
-            <Link
-              key={project.unique_id || project.message}
-              href={`/projects/${project.unique_id}`}
-            >
+            <Link href={`/projects/${project.unique_id}`}>
               <FileText />
               <span>{project.name || project.message}</span>
             </Link>
