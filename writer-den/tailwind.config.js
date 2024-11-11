@@ -1,65 +1,12 @@
 /** @type {import('tailwindcss').Config} */
 
-// const defaultTheme = require("tailwindcss/defaultTheme");
-
 module.exports = {
+  darkMode: ["class"],
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    colors: {
-      primary: {
-        10: "#010205",
-        20: "#051A33",
-        30: "#0F498F",
-        40: "#1460BD",
-        50: "#287ADD",
-        60: "#468EE7",
-        70: "#71AAEF",
-        80: "#A3CAFA",
-        90: "#D4E6FC",
-        98: "#F5F9FE",
-      },
-      secondary: {
-        10: "#050A39",
-        20: "#0B1465",
-        30: "#142090",
-        40: "#1B2BBB",
-        50: "#2E3FDC",
-        60: "#5362EA",
-        70: "#7D89F2",
-        80: "#ABB3F7",
-        90: "#DADDFB",
-        98: "#F6F7FE",
-      },
-      tertiary: {
-        10: "#062732",
-        20: "#0C4B5F",
-        30: "#11708D",
-        40: "#1992B8",
-        50: "#28B2DD",
-        60: "#50C3E7",
-        70: "#7CD3EE",
-        80: "#A9E2F4",
-        90: "#D6F2FA",
-        98: "#F6FCFE",
-      },
-      neutral: {
-        10: "#101519",
-        20: "#252E37",
-        30: "#3B4854",
-        40: "#4E6273",
-        50: "#647C90",
-        60: "#8395A5",
-        70: "#9FAEBC",
-        80: "#BDC8D1",
-        90: "#DAE1E7",
-        98: "#F8FAFB",
-      },
-      "validation-color": "#15bc20",
-      "error-color": "#ba1c17",
-    },
     fontSize: {
       sm: "0.8rem",
       base: "1rem",
@@ -69,10 +16,36 @@ module.exports = {
       "4xl": "2.5rem",
       "5xl": "3rem",
     },
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ["Inter", "sans-serif"],
+      },
+      borderRadius: {
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
+      },
+      colors: {
+        background: {
+          DEFAULT: "hsl(var(--background))",
+          secondary: "hsl(var(--secondary))",
+        },
+        sidebar: {
+          DEFAULT: "hsl(var(--background))",
+          foreground: "hsl(var(--foreground))",
+          primary: "hsl(var(--primary))",
+          "primary-foreground": "hsl(var(--primary-foreground))",
+          accent: "hsl(var(--accent))",
+          "accent-foreground": "hsl(var(--accent-foreground))",
+          border: "hsl(var(--border))",
+          ring: "hsl(var(--sidebar-ring))",
+        },
+      },
+    },
   },
   plugins: [
     require("@tailwindcss/aspect-ratio"),
     require("@tailwindcss/forms"),
+    require("tailwindcss-animate"),
   ],
 };

@@ -1,0 +1,6 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "jsx": "react-jsx" // Required by Jest and other testing environments
+  }
+}
