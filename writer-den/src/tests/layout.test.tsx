@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import Layout from "@/components/layout";
+import Layout from "@/components/custom/layout";
 
 fetchMock.mockResponse(
   JSON.stringify({

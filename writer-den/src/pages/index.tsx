@@ -1,7 +1,7 @@
-import ProjectsList from "@/components/list-projects";
-import IdeaForm from "@/components/idea-form";
-import ProjectForm from "@/components/project-form";
-import Layout from "@/components/layout";
+import ProjectsList from "@/components/custom/list-projects";
+import IdeaForm from "@/components/custom/idea-form";
+import ProjectForm from "@/components/custom/project-form";
+import Layout from "@/components/custom/layout";
 import { useModal } from "@/context/modal-context";
 
 export default function App() {

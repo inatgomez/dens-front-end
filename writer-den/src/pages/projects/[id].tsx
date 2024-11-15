@@ -1,10 +1,10 @@
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 
-import Layout from "@/components/layout";
-import ProjectForm from "@/components/project-form";
-import IdeaForm from "@/components/idea-form";
-import IdeasList from "@/components/list-ideas";
+import Layout from "@/components/custom/layout";
+import ProjectForm from "@/components/custom/project-form";
+import IdeaForm from "@/components/custom/idea-form";
+import IdeasList from "@/components/custom/list-ideas";
 import { useModal } from "@/context/modal-context";
 
 interface Project {
