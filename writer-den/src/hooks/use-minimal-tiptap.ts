@@ -4,7 +4,7 @@ import type { Content, UseEditorOptions } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
 import { useEditor } from "@tiptap/react";
 import { cn } from "@/lib/utils";
-import { getOutput, randomId } from "../components/minimal-tiptap/utils";
+import { getOutput } from "../components/minimal-tiptap/utils";
 import { useThrottle } from "../hooks/use-throttle";
 
 export interface UseMinimalTiptapEditorProps extends UseEditorOptions {

@@ -78,5 +78,3 @@ export const filterUrls = (urls: string[]): [string[], FileError[]] => {
 
   return [validUrls, errors];
 };
-
-export const randomId = (): string => Math.random().toString(36).slice(2, 11);
