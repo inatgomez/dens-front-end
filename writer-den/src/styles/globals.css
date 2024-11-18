@@ -2,8 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  @apply bg-background text-base;
+@layer base {
+  body {
+    @apply bg-background text-base;
+  }
 }
 
 @layer utilities {

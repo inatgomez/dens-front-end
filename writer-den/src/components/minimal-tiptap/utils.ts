@@ -1,5 +1,5 @@
 import type { Editor } from "@tiptap/react";
-import type { MinimalTiptapProps } from "./minimal-tiptap";
+import type { IdeaEditorProps } from "../custom/idea-input-chat";
 
 export type FileError = {
   url: string;
@@ -27,7 +27,7 @@ export const getShortcutKeys = (keys: string[]) => keys.map(getShortcutKey);
 
 export const getOutput = (
   editor: Editor,
-  format: MinimalTiptapProps["output"]
+  format: IdeaEditorProps["output"]
 ): object | string => {
   switch (format) {
     case "json":

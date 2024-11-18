@@ -1,17 +1,13 @@
-import ProjectsList from "@/components/custom/list-projects";
-import IdeaForm from "@/components/custom/idea-form";
-import ProjectForm from "@/components/custom/project-form";
 import Layout from "@/components/custom/layout";
-import { useModal } from "@/context/modal-context";
+import IdeaInputChat from "@/components/custom/idea-input-chat";
 
 export default function App() {
-  const { isIdeaModalOpen, isProjectModalOpen } = useModal();
-
   return (
     <Layout>
-      <ProjectsList />
-      {isIdeaModalOpen && <IdeaForm />}
-      {isProjectModalOpen && <ProjectForm />}
+      <div className='flex flex-col justify-center items-center'>
+        <h1 className='text-slate-50 text-3xl my-2'>What's your next idea?</h1>
+        <IdeaInputChat />
+      </div>
     </Layout>
   );
 }
