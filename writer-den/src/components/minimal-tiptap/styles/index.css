@@ -1,56 +1,9 @@
-@import "./partials/code.css";
 @import "./partials/placeholder.css";
 @import "./partials/lists.css";
 @import "./partials/typography.css";
 @import "./partials/zoom.css";
 
 :root {
-  --mt-overlay: rgba(251, 251, 251, 0.75);
-  --mt-transparent-foreground: rgba(0, 0, 0, 0.4);
-  --mt-bg-secondary: rgba(251, 251, 251, 0.8);
-  --mt-code-background: #082b781f;
-  --mt-code-color: #d4d4d4;
-  --mt-secondary: #9d9d9f;
-  --mt-pre-background: #ececec;
-  --mt-pre-border: #e0e0e0;
-  --mt-pre-color: #2f2f31;
-  --mt-hr: #dcdcdc;
-  --mt-drag-handle-hover: #5c5c5e;
-
-  --mt-accent-bold-blue: #05c;
-  --mt-accent-bold-teal: #206a83;
-  --mt-accent-bold-green: #216e4e;
-  --mt-accent-bold-orange: #a54800;
-  --mt-accent-bold-red: #ae2e24;
-  --mt-accent-bold-purple: #5e4db2;
-
-  --mt-accent-gray: #758195;
-  --mt-accent-blue: #1d7afc;
-  --mt-accent-teal: #2898bd;
-  --mt-accent-green: #22a06b;
-  --mt-accent-orange: #fea362;
-  --mt-accent-red: #c9372c;
-  --mt-accent-purple: #8270db;
-
-  --mt-accent-blue-subtler: #cce0ff;
-  --mt-accent-teal-subtler: #c6edfb;
-  --mt-accent-green-subtler: #baf3db;
-  --mt-accent-yellow-subtler: #f8e6a0;
-  --mt-accent-red-subtler: #ffd5d2;
-  --mt-accent-purple-subtler: #dfd8fd;
-
-  --hljs-string: #aa430f;
-  --hljs-title: #b08836;
-  --hljs-comment: #999999;
-  --hljs-keyword: #0c5eb1;
-  --hljs-attr: #3a92bc;
-  --hljs-literal: #c82b0f;
-  --hljs-name: #259792;
-  --hljs-selector-tag: #c8500f;
-  --hljs-number: #3da067;
-}
-
-.dark {
   --mt-overlay: rgba(31, 32, 35, 0.75);
   --mt-transparent-foreground: rgba(255, 255, 255, 0.4);
   --mt-bg-secondary: rgba(31, 32, 35, 0.8);
