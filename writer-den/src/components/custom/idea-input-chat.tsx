@@ -33,6 +33,15 @@ interface Project {
   unique_id: string;
 }
 
+const CATEGORY_OPTIONS = [
+  "PLOT",
+  "CHARACTER",
+  "THEME",
+  "SETTING",
+  "RESEARCH",
+  "RANDOM",
+];
+
 export const IdeaInputChat = React.forwardRef<HTMLDivElement, IdeaEditorProps>(
   ({ value, onChange, className, editorContentClassName, ...props }, ref) => {
     const editor = useMinimalTiptapEditor({
@@ -42,14 +51,6 @@ export const IdeaInputChat = React.forwardRef<HTMLDivElement, IdeaEditorProps>(
     });
 
     const [projects, setProjects] = React.useState<Project[]>([]);
-    const [category, setCategory] = React.useState([
-      "PLOT",
-      "CHARACTER",
-      "THEME",
-      "SETTING",
-      "RESEARCH",
-      "RANDOM",
-    ]);
     const [selectedProject, setSelectedProject] = React.useState<string | null>(
       null
     );
@@ -139,7 +140,7 @@ export const IdeaInputChat = React.forwardRef<HTMLDivElement, IdeaEditorProps>(
               <SelectValue placeholder='Select Category' />
             </SelectTrigger>
             <SelectContent>
-              {category.map((category) => (
+              {CATEGORY_OPTIONS.map((category) => (
                 <SelectItem key={category} value={category}>
                   {category}
                 </SelectItem>
