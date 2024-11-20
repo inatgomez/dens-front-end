@@ -105,7 +105,7 @@ export const IdeaInputChat = React.forwardRef<HTMLDivElement, IdeaEditorProps>(
         name='editor'
         ref={ref}
         className={cn(
-          "flex max-h-96 w-8/12 rounded-xl shadow-md bg-slate-600",
+          "flex flex-col max-h-96 w-8/12 rounded-xl shadow-md bg-slate-600",
           className
         )}
       >
@@ -118,7 +118,7 @@ export const IdeaInputChat = React.forwardRef<HTMLDivElement, IdeaEditorProps>(
             )}
           />
         </ScrollArea>
-        <div className='flex items-end justify-end p-4 mt-4'>
+        <div className='flex items-center justify-end gap-1 p-4 mt-4'>
           <Select onValueChange={setSelectedProject}>
             <SelectTrigger>
               <SelectValue placeholder='Select Project' />
