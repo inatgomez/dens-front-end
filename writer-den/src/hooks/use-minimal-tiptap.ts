@@ -3,6 +3,7 @@ import type { Editor } from "@tiptap/react";
 import type { Content, UseEditorOptions } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
 import { useEditor } from "@tiptap/react";
+import { CharacterCount } from "@tiptap/extension-character-count";
 import { cn } from "@/lib/utils";
 import { getOutput } from "../components/minimal-tiptap/utils";
 import { useThrottle } from "../hooks/use-throttle";
@@ -17,6 +18,8 @@ export interface UseMinimalTiptapEditorProps extends UseEditorOptions {
   onBlur?: (content: Content) => void;
 }
 
+export const limit = 2000;
+
 const createExtensions = () => [
   StarterKit.configure({
     horizontalRule: false,
@@ -28,6 +31,9 @@ const createExtensions = () => [
     orderedList: { HTMLAttributes: { class: "list-node" } },
     code: { HTMLAttributes: { class: "inline", spellcheck: "false" } },
     dropcursor: { width: 2, class: "ProseMirror-dropcursor border" },
+  }),
+  CharacterCount.configure({
+    limit,
   }),
 ];
 

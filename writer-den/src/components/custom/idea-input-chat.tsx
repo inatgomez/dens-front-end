@@ -13,7 +13,7 @@ import type { Content } from "@tiptap/react";
 import type { UseMinimalTiptapEditorProps } from "../../hooks/use-minimal-tiptap";
 import { EditorContent } from "@tiptap/react";
 import { cn } from "@/lib/utils";
-import { useMinimalTiptapEditor } from "../../hooks/use-minimal-tiptap";
+import { useMinimalTiptapEditor, limit } from "../../hooks/use-minimal-tiptap";
 import { MeasuredContainer } from "../minimal-tiptap/measured-container";
 import { Send } from "lucide-react";
 
@@ -43,12 +43,12 @@ export const IdeaInputChat = React.forwardRef<HTMLDivElement, IdeaEditorProps>(
 
     const [projects, setProjects] = React.useState<Project[]>([]);
     const [category, setCategory] = React.useState([
-      "Plot",
-      "Character",
-      "Theme",
-      "Setting",
-      "Research",
-      "None",
+      "PLOT",
+      "CHARACTER",
+      "THEME",
+      "SETTING",
+      "RESEARCH",
+      "RANDOM",
     ]);
     const [selectedProject, setSelectedProject] = React.useState<string | null>(
       null
@@ -118,14 +118,17 @@ export const IdeaInputChat = React.forwardRef<HTMLDivElement, IdeaEditorProps>(
             )}
           />
         </ScrollArea>
-        <div className='flex items-center justify-end gap-1 p-4 mt-4'>
+        <div className='flex items-center justify-end text-sm text-foreground gap-2 px-6'>
+          {editor.storage.characterCount.characters()} / {limit}
+        </div>
+        <div className='flex items-center justify-end gap-1 px-6 my-4'>
           <Select onValueChange={setSelectedProject}>
             <SelectTrigger>
               <SelectValue placeholder='Select Project' />
             </SelectTrigger>
             <SelectContent>
               {projects.map((project) => (
-                <SelectItem key={project.unique_id} value={project.name}>
+                <SelectItem key={project.unique_id} value={project.unique_id}>
                   {project.name}
                 </SelectItem>
               ))}
