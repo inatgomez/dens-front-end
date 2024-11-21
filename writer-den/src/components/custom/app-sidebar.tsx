@@ -82,8 +82,8 @@ export function AppSidebar() {
         <SidebarSeparator />
         <SidebarGroup>
           <SidebarGroupLabel>Projects</SidebarGroupLabel>
-          <SidebarGroupAction title='Add Project'>
-            <Plus /> <span className='sr-only'>Add Project</span>
+          <SidebarGroupAction title='New Project'>
+            <Plus /> <span className='sr-only'>New Project</span>
           </SidebarGroupAction>
           <SidebarGroupContent>
             <React.Suspense fallback={<NavProjectsSkeleton />}>
