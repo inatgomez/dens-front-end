@@ -1,5 +1,5 @@
 // import { cookies } from "next/headers";
-import { SidebarInset, SidebarProvider, SidebarTrigger } from "./ui/sidebar";
+import { SidebarInset, SidebarProvider, SidebarTrigger } from "../ui/sidebar";
 import { AppSidebar } from "./app-sidebar";
 export default function Layout({ children }: { children: React.ReactNode }) {
   // const cookieStore = await cookies();
@@ -8,10 +8,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <main className='bg-background-secondary md:rounded-sm'>
+        <div>
           <SidebarTrigger />
           {children}
-        </main>
+        </div>
       </SidebarInset>
     </SidebarProvider>
   );

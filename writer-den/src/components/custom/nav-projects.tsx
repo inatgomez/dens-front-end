@@ -6,7 +6,7 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
   SidebarMenuSkeleton,
-} from "./ui/sidebar";
+} from "../ui/sidebar";
 import { FileText } from "lucide-react";
 
 interface Project {
