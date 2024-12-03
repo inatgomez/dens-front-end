@@ -5,7 +5,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogOverlay,
+  DialogFooter,
 } from "../ui/dialog";
 import {
   Select,
@@ -16,8 +16,39 @@ import {
 } from "../ui/select";
 
 import { createProject } from "@/services/projectService";
+import { Button } from "../ui/button";
 
-// Use Dialog component as wrapper for the form. Use newproject component as wrapper for the groupaction in sidebar.
-// Use select component inside form to choose genres.
+const GENRES = [
+  "ROMANCE",
+  "MISTERY",
+  "SCI-FI",
+  "FANTASY",
+  "ACTION",
+  "DRAMA",
+  "DETECTIVE",
+  "HORROR",
+  "COMING OF AGE",
+  "COMEDY",
+];
 
-const CreateNewProject = React.forwardRef;
+export default function CreateNewProject({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <Dialog>
+      <DialogTrigger asChild>{children}</DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Create new project</DialogTitle>
+        </DialogHeader>
+        <DialogFooter>
+          <Button variant='default' size='lg' type='submit'>
+            Save project
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}

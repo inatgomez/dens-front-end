@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Modal from "./modal";
 import { useModal } from "@/context/modal-context";
 import { createProject } from "@/services/projectService";
 export default function ProjectForm() {
