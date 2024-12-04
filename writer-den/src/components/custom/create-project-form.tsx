@@ -55,21 +55,29 @@ const formSchema = z.object({
       message: "Name must be at least 2 characters",
     })
     .max(100),
-  main_genre: z.string(),
-  mix_genre: z.string(),
+  main_genre: z.string().min(1, {
+    message: "Main genre is required.",
+  }),
+  mix_genre: z.string().optional(),
 });
 
 const CreateNewProjectForm: React.FC<CreateNewProjectFormProps> = ({
   children,
 }) => {
+  const [isDialogOpen, setIsDialogOpen] = React.useState(false);
+
   const { toast } = useToast();
 
-  async function handleSubmit(
-    values: z.infer<typeof formSchema>,
-    e: React.FormEvent
-  ) {
-    e.preventDefault();
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: "Untitled",
+      main_genre: "",
+      mix_genre: "",
+    },
+  });
 
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       await createProject(values);
       toast({
@@ -81,20 +89,11 @@ const CreateNewProjectForm: React.FC<CreateNewProjectFormProps> = ({
       });
       console.error("Failed to create project:", error);
     }
-    console.log(values);
+    console.log("Submitted values:", values);
   }
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: "Untitled",
-      main_genre: "NONE",
-      mix_genre: "NONE",
-    },
-  });
-
   return (
-    <Dialog>
+    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -102,7 +101,10 @@ const CreateNewProjectForm: React.FC<CreateNewProjectFormProps> = ({
         </DialogHeader>
         <Form {...form}>
           <form
-            onSubmit={form.handleSubmit(handleSubmit)}
+            onSubmit={form.handleSubmit(async (values) => {
+              await onSubmit(values);
+              setIsDialogOpen(false);
+            })}
             className='space-y-8 flex flex-col'
           >
             <FormField
@@ -125,7 +127,10 @@ const CreateNewProjectForm: React.FC<CreateNewProjectFormProps> = ({
                 <FormItem>
                   <FormLabel>What's the main genre?</FormLabel>
                   <FormControl>
-                    <Select>
+                    <Select
+                      onValueChange={(value) => field.onChange(value)}
+                      value={field.value}
+                    >
                       <SelectTrigger className='w-1/2'>
                         <SelectValue
                           placeholder='Select main genre'
@@ -152,7 +157,10 @@ const CreateNewProjectForm: React.FC<CreateNewProjectFormProps> = ({
                 <FormItem>
                   <FormLabel>What's the second genre?</FormLabel>
                   <FormControl>
-                    <Select>
+                    <Select
+                      onValueChange={(value) => field.onChange(value)}
+                      value={field.value}
+                    >
                       <SelectTrigger className='w-1/2'>
                         <SelectValue
                           placeholder='Select second genre'
