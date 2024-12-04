@@ -23,7 +23,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/hooks/use-toast";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -57,16 +56,12 @@ const formSchema = z.object({
     })
     .max(100),
   main_genre: z.string(),
-  other_genre: z.string(),
+  mix_genre: z.string(),
 });
 
 const CreateNewProjectForm: React.FC<CreateNewProjectFormProps> = ({
   children,
 }) => {
-  const [name, setName] = React.useState("");
-  const [mainGenre, setMainGenre] = React.useState("");
-  const [otherGenre, setOtherGenre] = React.useState("");
-
   const { toast } = useToast();
 
   async function handleSubmit(
@@ -75,21 +70,16 @@ const CreateNewProjectForm: React.FC<CreateNewProjectFormProps> = ({
   ) {
     e.preventDefault();
 
-    const projectData = {
-      name,
-      main_genre: mainGenre.toUpperCase(),
-      mix_genre: otherGenre === "None" ? "" : otherGenre.toUpperCase(),
-    };
-
     try {
-      await createProject(projectData);
+      await createProject(values);
       toast({
-        description: "Your project has been created",
+        description: "Success! Your project has been created.",
       });
     } catch (error) {
       toast({
         description: "Failed to create project. Try again.",
       });
+      console.error("Failed to create project:", error);
     }
     console.log(values);
   }
@@ -97,9 +87,9 @@ const CreateNewProjectForm: React.FC<CreateNewProjectFormProps> = ({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      main_genre: "",
-      other_genre: "",
+      name: "Untitled",
+      main_genre: "NONE",
+      mix_genre: "NONE",
     },
   });
 
@@ -157,7 +147,7 @@ const CreateNewProjectForm: React.FC<CreateNewProjectFormProps> = ({
             />
             <FormField
               control={form.control}
-              name='other_genre'
+              name='mix_genre'
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>What's the second genre?</FormLabel>

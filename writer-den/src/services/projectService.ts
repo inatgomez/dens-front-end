@@ -18,9 +18,9 @@ export async function getProjects() {
 }
 
 export async function createProject(projectData: {
-  name: string;
-  main_genre: string;
-  mix_genre: string;
+  name?: string;
+  main_genre?: string;
+  mix_genre?: string;
 }) {
   try {
     const response = await fetch(
