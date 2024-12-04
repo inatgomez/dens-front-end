@@ -33,7 +33,6 @@ import { z } from "zod";
 import { createProject } from "@/services/projectService";
 
 interface CreateNewProjectFormProps {
-  onSubmit: (project: string[]) => void;
   children: React.ReactNode;
 }
 
@@ -62,7 +61,6 @@ const formSchema = z.object({
 });
 
 const CreateNewProjectForm: React.FC<CreateNewProjectFormProps> = ({
-  onSubmit,
   children,
 }) => {
   const [name, setName] = React.useState("");

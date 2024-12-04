@@ -31,7 +31,7 @@ import { NavProjects, NavProjectsSkeleton } from "./nav-projects";
 
 import { ChevronUp, User2 } from "lucide-react";
 import * as React from "react";
-import CreateNewProjectForm from "./create-project-form";
+import { CreateNewProjectForm } from "./create-project-form";
 
 const items = [
   {
@@ -56,54 +56,7 @@ const items = [
   },
 ];
 
-const ACTIONS = {
-  ADD_PROJECT: "add_project",
-  EDIT_PROJECT: "edit_project",
-  DELETE_PROJECT: "delete_project",
-};
-
-function projectReducer(state, action) {
-  switch (action.type) {
-    case ACTIONS.ADD_PROJECT:
-      return { ...state, projects: [...state.projects, action.payload] };
-    case ACTIONS.EDIT_PROJECT:
-      return {
-        ...state,
-        projects: state.projects.map((project) =>
-          project.id === action.payload.id ? action.payload : project
-        ),
-      };
-    case ACTIONS.DELETE_PROJECT:
-      return {
-        ...state,
-        projects: state.projects.filter(
-          (project) => project.id !== action.payload
-        ),
-      };
-    default:
-      throw new Error(`Unhandled action type: ${action.type}`);
-  }
-}
-
-const initialState = {
-  projects: [],
-};
-
 export function AppSidebar() {
-  const [state, dispatch] = React.useReducer(projectReducer, initialState);
-
-  function addProject(newProject: string[]) {
-    dispatch({ type: ACTIONS.ADD_PROJECT, payload: newProject });
-  }
-
-  function editProject(updatedProject: string[]) {
-    dispatch({ type: ACTIONS.EDIT_PROJECT, payload: updatedProject });
-  }
-
-  function deleteProject(projectId: string) {
-    dispatch({ type: ACTIONS.DELETE_PROJECT, payload: projectId });
-  }
-
   return (
     <Sidebar variant='inset' collapsible='icon'>
       <SidebarContent>
@@ -130,7 +83,7 @@ export function AppSidebar() {
         <SidebarSeparator />
         <SidebarGroup>
           <SidebarGroupLabel>Projects</SidebarGroupLabel>
-          <CreateNewProjectForm onSubmit={(project) => addProject(project)}>
+          <CreateNewProjectForm>
             <SidebarGroupAction title='New Project'>
               <Plus /> <span className='sr-only'>New Project</span>
             </SidebarGroupAction>
