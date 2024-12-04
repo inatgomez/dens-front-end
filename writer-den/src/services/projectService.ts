@@ -45,3 +45,54 @@ export async function createProject(projectData: {
     throw error;
   }
 }
+
+export async function editProject(projectData: {
+  unique_id: string;
+  name?: string;
+  main_genre?: string;
+  mix_genre?: string;
+}) {
+  try {
+    const response = await fetch(
+      `http://localhost:8000/ideasrecording/projects/${projectData.unique_id}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(projectData),
+      }
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.detail || "Failed to edit project.");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error editing project:", error);
+    throw error;
+  }
+}
+
+export async function deleteProject(unique_id: string) {
+  try {
+    const response = await fetch(
+      `http://localhost:8000/ideasrecording/projects/${unique_id}`,
+      {
+        method: "DELETE",
+      }
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.detail || "Failed to delete project.");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error deleting the project:", error);
+    throw error;
+  }
+}
