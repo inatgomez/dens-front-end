@@ -49,11 +49,14 @@ function NavProjects() {
                 <MoreHorizontal />
               </SidebarMenuAction>
             </DropdownMenuTrigger>
-            <DropdownMenuContent side='right' align='start'>
-              <DropdownMenuItem>
+            <DropdownMenuContent
+              side='right'
+              className='p-2 rounded-md border border-slate-600 bg-slate-950 text-slate-50 text-sm'
+            >
+              <DropdownMenuItem className='cursor-default focus:bg-slate-700 focus:text-slate-50 outline-none rounded-sm px-2 py-1.5 transition-colors'>
                 <span>Edit Project</span>
               </DropdownMenuItem>
-              <DropdownMenuItem>
+              <DropdownMenuItem className='cursor-default focus:bg-slate-700 focus:text-slate-50 outline-none rounded-sm px-2 py-1.5 transition-colors'>
                 <span>Delete Project</span>
               </DropdownMenuItem>
             </DropdownMenuContent>
