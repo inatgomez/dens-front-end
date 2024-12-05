@@ -19,6 +19,8 @@ import {
 import { deleteProject } from "@/services/projectService";
 import { useToast } from "@/hooks/use-toast";
 
+import { EditProjectForm } from "./edit-project-form";
+
 interface Project {
   unique_id: string;
   name: string;
@@ -27,6 +29,9 @@ interface Project {
 
 function NavProjects() {
   const [projects, setProjects] = React.useState<Project[]>([]);
+  const [editDialogOpen, setEditDialogOpen] = React.useState<string | null>(
+    null
+  );
 
   const { toast } = useToast();
 
@@ -45,6 +50,7 @@ function NavProjects() {
         toast({
           description: "Your project has been deleted.",
         });
+        setProjects((prev) => prev.filter((p) => p.unique_id !== unique_id));
       }
     } catch (error) {
       toast({
@@ -75,16 +81,25 @@ function NavProjects() {
               side='right'
               className='p-2 rounded-md border border-slate-600 bg-slate-950 text-slate-50 text-sm'
             >
-              <DropdownMenuItem className='cursor-default focus:bg-slate-700 focus:text-slate-50 outline-none rounded-sm px-2 py-1.5 transition-colors'>
+              <DropdownMenuItem
+                onClick={() => setEditDialogOpen(project.unique_id)}
+                className='cursor-default focus:bg-slate-700 focus:text-slate-50 outline-none rounded-sm px-2 py-1.5 transition-colors'
+              >
                 <span>Edit Project</span>
               </DropdownMenuItem>
-              <DropdownMenuItem className='cursor-default focus:bg-slate-700 focus:text-slate-50 outline-none rounded-sm px-2 py-1.5 transition-colors'>
-                <button onClick={() => onClickDelete(project.unique_id)}>
-                  Delete Project
-                </button>
+              <DropdownMenuItem
+                onClick={() => onClickDelete(project.unique_id)}
+                className='cursor-default focus:bg-slate-700 focus:text-slate-50 outline-none rounded-sm px-2 py-1.5 transition-colors'
+              >
+                <span>Delete Project</span>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+          <EditProjectForm
+            projectId={project.unique_id}
+            isOpen={editDialogOpen === project.unique_id}
+            onClose={() => setEditDialogOpen(null)}
+          />
         </SidebarMenuItem>
       ))}
     </SidebarMenu>

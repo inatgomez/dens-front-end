@@ -29,10 +29,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { createProject } from "@/services/projectService";
+import { getProject, editProject } from "@/services/projectService";
 
-interface CreateNewProjectFormProps {
-  children: React.ReactNode;
+interface EditProjectFormProps {
+  projectId: string;
+  isOpen: boolean;
+  onClose: () => void;
 }
 
 const GENRES = [
@@ -61,9 +63,11 @@ const formSchema = z.object({
   mix_genre: z.string().optional(),
 });
 
-const EditProjectForm: React.FC<CreateNewProjectFormProps> = ({ children }) => {
-  const [isDialogOpen, setIsDialogOpen] = React.useState(false);
-
+const EditProjectForm: React.FC<EditProjectFormProps> = ({
+  projectId,
+  isOpen,
+  onClose,
+}) => {
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -75,34 +79,50 @@ const EditProjectForm: React.FC<CreateNewProjectFormProps> = ({ children }) => {
     },
   });
 
+  React.useEffect(() => {
+    async function fetchProject() {
+      if (isOpen) {
+        try {
+          const project = await getProject(projectId);
+          form.reset(project);
+        } catch (error) {
+          toast({
+            description: "Failed to lead project details.",
+          });
+          console.error("Failed to load project details:", error);
+        }
+      }
+    }
+    fetchProject();
+  }, [isOpen, projectId, form, toast]);
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      await createProject(values);
-      toast({
-        description: "Success! Your project has been created.",
-      });
+      const data = await editProject(projectId, values);
+
+      if (data) {
+        toast({
+          description: "Success! Your project has been updated.",
+        });
+        onClose();
+      }
     } catch (error) {
       toast({
-        description: "Failed to create project. Try again.",
+        description: "Failed to update project. Try again.",
       });
-      console.error("Failed to create project:", error);
+      console.error("Failed to update project:", error);
     }
-    console.log("Submitted values:", values);
   }
 
   return (
-    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-      <DialogTrigger asChild>{children}</DialogTrigger>
+    <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Create New Project</DialogTitle>
+          <DialogTitle>Edit Project</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form
-            onSubmit={form.handleSubmit(async (values) => {
-              await onSubmit(values);
-              setIsDialogOpen(false);
-            })}
+            onSubmit={form.handleSubmit(onSubmit)}
             className='space-y-8 flex flex-col'
           >
             <FormField
@@ -178,13 +198,8 @@ const EditProjectForm: React.FC<CreateNewProjectFormProps> = ({ children }) => {
                 </FormItem>
               )}
             />
-            <Button
-              variant='default'
-              size='lg'
-              type='submit'
-              className='justify-self-end'
-            >
-              Save project
+            <Button variant='default' size='lg' type='submit'>
+              Save Changes
             </Button>
           </form>
         </Form>
