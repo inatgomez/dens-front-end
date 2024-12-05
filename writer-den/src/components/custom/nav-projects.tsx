@@ -16,6 +16,9 @@ import {
   DropdownMenuTrigger,
 } from "@radix-ui/react-dropdown-menu";
 
+import { deleteProject } from "@/services/projectService";
+import { useToast } from "@/hooks/use-toast";
+
 interface Project {
   unique_id: string;
   name: string;
@@ -25,6 +28,8 @@ interface Project {
 function NavProjects() {
   const [projects, setProjects] = React.useState<Project[]>([]);
 
+  const { toast } = useToast();
+
   React.useEffect(() => {
     async function fetchProjects() {
       const data = await getProjects();
@@ -32,6 +37,23 @@ function NavProjects() {
     }
     fetchProjects();
   }, []);
+
+  async function onClickDelete(unique_id: string) {
+    try {
+      const response = await deleteProject(unique_id);
+      if (response.ok) {
+        toast({
+          description: "Your project has been deleted.",
+        });
+      }
+    } catch (error) {
+      toast({
+        description: "Failed to delete project. Try again.",
+      });
+      console.error("Failed to delete project:", error);
+    }
+    console.log("Project id:", unique_id);
+  }
 
   return (
     <SidebarMenu>
@@ -57,7 +79,9 @@ function NavProjects() {
                 <span>Edit Project</span>
               </DropdownMenuItem>
               <DropdownMenuItem className='cursor-default focus:bg-slate-700 focus:text-slate-50 outline-none rounded-sm px-2 py-1.5 transition-colors'>
-                <span>Delete Project</span>
+                <button onClick={() => onClickDelete(project.unique_id)}>
+                  Delete Project
+                </button>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

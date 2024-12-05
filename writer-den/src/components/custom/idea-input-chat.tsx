@@ -92,11 +92,13 @@ export const IdeaInputChat = React.forwardRef<HTMLDivElement, IdeaEditorProps>(
       };
 
       try {
-        const result = await createIdea(selectedProject, ideaData);
-        toast({
-          description: "Success! Your idea was saved.",
-        });
-        console.log("Idea saved successfully:", result);
+        const response = await createIdea(selectedProject, ideaData);
+        if (response.ok) {
+          toast({
+            description: "Success! Your idea was saved.",
+          });
+        }
+        console.log("Idea saved successfully:", response);
       } catch (error) {
         toast({
           description: "Failed to save the idea. Try again.",
