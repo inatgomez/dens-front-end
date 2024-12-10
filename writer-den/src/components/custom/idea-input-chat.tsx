@@ -16,6 +16,7 @@ import { cn } from "@/lib/utils";
 import { useMinimalTiptapEditor, limit } from "../../hooks/use-minimal-tiptap";
 import { MeasuredContainer } from "../minimal-tiptap/measured-container";
 import { Send } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 import { createIdea } from "@/services/ideaService";
 import { getProjects } from "@/services/projectService";
@@ -58,6 +59,8 @@ export const IdeaInputChat = React.forwardRef<HTMLDivElement, IdeaEditorProps>(
       string | null
     >(null);
 
+    const { toast } = useToast();
+
     React.useEffect(() => {
       async function fetchProjects() {
         const projectsData = await getProjects();
@@ -89,9 +92,17 @@ export const IdeaInputChat = React.forwardRef<HTMLDivElement, IdeaEditorProps>(
       };
 
       try {
-        const result = await createIdea(selectedProject, ideaData);
-        console.log("Idea saved successfully:", result);
+        const response = await createIdea(selectedProject, ideaData);
+        if (response.ok) {
+          toast({
+            description: "Success! Your idea was saved.",
+          });
+        }
+        console.log("Idea saved successfully:", response);
       } catch (error) {
+        toast({
+          description: "Failed to save the idea. Try again.",
+        });
         console.error("Failed to save idea:", error);
       }
     };

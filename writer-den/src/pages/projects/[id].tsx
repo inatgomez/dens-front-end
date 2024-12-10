@@ -2,10 +2,7 @@ import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 
 import Layout from "@/components/custom/layout";
-import ProjectForm from "@/components/custom/project-form";
-import IdeaForm from "@/components/custom/idea-form";
 import IdeasList from "@/components/custom/list-ideas";
-import { useModal } from "@/context/modal-context";
 
 interface Project {
   unique_id: string;
@@ -19,8 +16,6 @@ export default function ProjectPage() {
   const { id } = router.query;
   const [project, setProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState(true);
-
-  const { isIdeaModalOpen, isProjectModalOpen } = useModal();
 
   useEffect(() => {
     async function fetchProject() {
@@ -43,19 +38,13 @@ export default function ProjectPage() {
 
   return (
     <Layout>
-      <div className='flex flex-col col-span-4 p-4 bg-neutral-10 min-h-screen'>
-        <h1 className='text-3xl text-neutral-98 font-bold'>{project.name}</h1>
-        <p className='text-xl text-neutral-98'>
+      <div className='flex flex-col col-span-4 items-center p-4 min-h-screen'>
+        <h1 className='text-3xl text-slate-50 font-bold'>{project.name}</h1>
+        <p className='text-xl text-slate-50'>
           {project.main_genre} / {project.mix_genre}
-        </p>
-        <p className='text-sm text-neutral-90'>
-          Created on: {new Date(project.created_at).toLocaleDateString()}
         </p>
         <IdeasList projectId={id as string} />
       </div>
-
-      {isIdeaModalOpen && <IdeaForm />}
-      {isProjectModalOpen && <ProjectForm />}
     </Layout>
   );
 }

@@ -31,11 +31,12 @@ import { NavProjects, NavProjectsSkeleton } from "./nav-projects";
 
 import { ChevronUp, User2 } from "lucide-react";
 import * as React from "react";
+import { CreateNewProjectForm } from "./create-project-form";
 
 const items = [
   {
     title: "New idea",
-    url: "#",
+    url: "/",
     icon: SquarePen,
   },
   {
@@ -82,9 +83,11 @@ export function AppSidebar() {
         <SidebarSeparator />
         <SidebarGroup>
           <SidebarGroupLabel>Projects</SidebarGroupLabel>
-          <SidebarGroupAction title='New Project'>
-            <Plus /> <span className='sr-only'>New Project</span>
-          </SidebarGroupAction>
+          <CreateNewProjectForm>
+            <SidebarGroupAction title='New Project'>
+              <Plus /> <span className='sr-only'>New Project</span>
+            </SidebarGroupAction>
+          </CreateNewProjectForm>
           <SidebarGroupContent>
             <React.Suspense fallback={<NavProjectsSkeleton />}>
               <NavProjects />
