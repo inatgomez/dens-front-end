@@ -23,16 +23,26 @@ export async function getProject(unique_id: string) {
       `http://localhost:8000/ideasrecording/projects/${unique_id}`
     );
     if (!response.ok) {
-      throw new Error("Failed to fecth project.");
+      throw new Error("Failed to fetch project.");
     }
-
     const data = await response.json();
+
     return data.length > 0
-      ? data
-      : [{ message: "You'll see your project soon." }];
+      ? data[0]
+      : {
+          name: "Untitled",
+          main_genre: "",
+          mix_genre: "",
+          message: "You'll see your project soon.",
+        };
   } catch (error) {
     console.error("Error fetching project:", error);
-    return [{ message: "Failed to load project. Please try again later" }];
+    return {
+      name: "Untitled",
+      main_genre: "",
+      mix_genre: "",
+      message: "Failed to load project. Please try again later",
+    };
   }
 }
 

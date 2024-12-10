@@ -87,26 +87,29 @@ const EditProjectForm: React.FC<EditProjectFormProps> = ({
       projectId
     );
     async function fetchProject() {
-      if (isOpen) {
-        try {
-          const project = await getProject(projectId);
-          console.log("Resetting form with values:", {
-            name: project.name || "Untitled",
-            main_genre: project.main_genre || "",
-            mix_genre: project.mix_genre || "",
-          });
-          form.reset({
-            name: project.name || "Untitled",
-            main_genre: project.main_genre || "",
-            mix_genre: project.mix_genre || "",
-          });
-          console.log("Form reset complete.");
-        } catch (error) {
-          toast({
-            description: "Failed to lead project details.",
-          });
-          console.error("Failed to load project details:", error);
-        }
+      if (!isOpen || !projectId) {
+        console.log("Early return: isOpen or projectId is falsy");
+        return;
+      }
+
+      try {
+        console.log("Attempting to fetch project details...");
+        const project = await getProject(projectId);
+
+        console.log("Project fetched:", project);
+
+        form.reset({
+          name: project.name || "Untitled",
+          main_genre: project.main_genre || "",
+          mix_genre: project.mix_genre || "",
+        });
+
+        console.log("Form reset complete.");
+      } catch (error) {
+        toast({
+          description: "Failed to lead project details.",
+        });
+        console.error("Failed to load project details:", error);
       }
     }
     fetchProject();
@@ -139,9 +142,12 @@ const EditProjectForm: React.FC<EditProjectFormProps> = ({
         if (!state) onClose();
       }}
     >
-      <DialogContent>
+      <DialogContent aria-describedby='project-edit-description'>
         <DialogHeader>
           <DialogTitle>Edit Project</DialogTitle>
+          <p id='project-edit-description' className='sr-only'>
+            Edit the details of your project
+          </p>
         </DialogHeader>
         <Form {...form}>
           <form
