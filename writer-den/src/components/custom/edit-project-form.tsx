@@ -80,11 +80,27 @@ const EditProjectForm: React.FC<EditProjectFormProps> = ({
   });
 
   React.useEffect(() => {
+    console.log(
+      "useEffect triggered: isOpen:",
+      isOpen,
+      "projectId:",
+      projectId
+    );
     async function fetchProject() {
       if (isOpen) {
         try {
           const project = await getProject(projectId);
-          form.reset(project);
+          console.log("Resetting form with values:", {
+            name: project.name || "Untitled",
+            main_genre: project.main_genre || "",
+            mix_genre: project.mix_genre || "",
+          });
+          form.reset({
+            name: project.name || "Untitled",
+            main_genre: project.main_genre || "",
+            mix_genre: project.mix_genre || "",
+          });
+          console.log("Form reset complete.");
         } catch (error) {
           toast({
             description: "Failed to lead project details.",
@@ -104,6 +120,7 @@ const EditProjectForm: React.FC<EditProjectFormProps> = ({
         toast({
           description: "Success! Your project has been updated.",
         });
+        console.log("Form values o submit:", values);
         onClose();
       }
     } catch (error) {
@@ -115,7 +132,13 @@ const EditProjectForm: React.FC<EditProjectFormProps> = ({
   }
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog
+      open={isOpen}
+      onOpenChange={(state) => {
+        console.log("Dialog state changed to:", state);
+        if (!state) onClose();
+      }}
+    >
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Edit Project</DialogTitle>

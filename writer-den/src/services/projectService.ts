@@ -111,7 +111,7 @@ export async function deleteProject(unique_id: string) {
       throw new Error(errorData.detail || "Failed to delete project.");
     }
 
-    return await response.json();
+    return response;
   } catch (error) {
     console.error("Error deleting the project:", error);
     throw error;
