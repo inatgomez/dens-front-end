@@ -30,11 +30,13 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { getProject, editProject } from "@/services/projectService";
+import { Project } from "./nav-projects";
 
 interface EditProjectFormProps {
   projectId: string;
   isOpen: boolean;
   onClose: () => void;
+  onUpdateProject: (updatedProject: Project) => void;
 }
 
 const GENRES = [
@@ -67,6 +69,7 @@ const EditProjectForm: React.FC<EditProjectFormProps> = ({
   projectId,
   isOpen,
   onClose,
+  onUpdateProject,
 }) => {
   const { toast } = useToast();
 
@@ -124,6 +127,7 @@ const EditProjectForm: React.FC<EditProjectFormProps> = ({
           description: "Success! Your project has been updated.",
         });
         console.log("Form values o submit:", values);
+        onUpdateProject(data);
         onClose();
       }
     } catch (error) {

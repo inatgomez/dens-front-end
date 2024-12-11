@@ -21,14 +21,23 @@ import { useToast } from "@/hooks/use-toast";
 
 import { EditProjectForm } from "./edit-project-form";
 
-interface Project {
+export interface Project {
   unique_id: string;
   name: string;
   message?: string;
 }
 
-function NavProjects() {
-  const [projects, setProjects] = React.useState<Project[]>([]);
+interface NavProjectsProps {
+  projects: Project[];
+  onUpdateProject: (updatedProject: Project) => void;
+  onDeleteProject: (projectId: string) => void;
+}
+
+function NavProjects({
+  projects,
+  onUpdateProject,
+  onDeleteProject,
+}: NavProjectsProps) {
   const [editDialogOpen, setEditDialogOpen] = React.useState<string | null>(
     null
   );
@@ -39,14 +48,6 @@ function NavProjects() {
     console.log("State changed: editDialogOpen =", editDialogOpen);
   }, [editDialogOpen]);
 
-  React.useEffect(() => {
-    async function fetchProjects() {
-      const data = await getProjects();
-      setProjects(data);
-    }
-    fetchProjects();
-  }, []);
-
   async function onClickDelete(unique_id: string) {
     try {
       const response = await deleteProject(unique_id);
@@ -54,7 +55,7 @@ function NavProjects() {
         toast({
           description: "Your project has been deleted.",
         });
-        setProjects((prev) => prev.filter((p) => p.unique_id !== unique_id));
+        onDeleteProject(unique_id);
       }
     } catch (error) {
       toast({
@@ -115,6 +116,7 @@ function NavProjects() {
               console.log("Closing dialog, resetting editDialogOpen to null.");
               setEditDialogOpen(null);
             }}
+            onUpdateProject={onUpdateProject}
           />
         </SidebarMenuItem>
       ))}
