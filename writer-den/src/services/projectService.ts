@@ -27,14 +27,14 @@ export async function getProject(unique_id: string) {
     }
     const data = await response.json();
 
-    return data.length > 0
-      ? data[0]
-      : {
-          name: "Untitled",
-          main_genre: "",
-          mix_genre: "",
-          message: "You'll see your project soon.",
-        };
+    return (
+      data || {
+        name: "Untitled",
+        main_genre: "",
+        mix_genre: "",
+        message: "No project found",
+      }
+    );
   } catch (error) {
     console.error("Error fetching project:", error);
     return {

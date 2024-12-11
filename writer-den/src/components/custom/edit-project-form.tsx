@@ -1,7 +1,6 @@
 import * as React from "react";
 import {
   Dialog,
-  DialogTrigger,
   DialogContent,
   DialogHeader,
   DialogTitle,
@@ -83,38 +82,28 @@ const EditProjectForm: React.FC<EditProjectFormProps> = ({
   });
 
   React.useEffect(() => {
-    console.log(
-      "useEffect triggered: isOpen:",
-      isOpen,
-      "projectId:",
-      projectId
-    );
     async function fetchProject() {
       if (!isOpen || !projectId) {
-        console.log("Early return: isOpen or projectId is falsy");
+        console.log("Early return - conditions not met");
         return;
       }
 
       try {
-        console.log("Attempting to fetch project details...");
         const project = await getProject(projectId);
-
-        console.log("Project fetched:", project);
 
         form.reset({
           name: project.name || "Untitled",
           main_genre: project.main_genre || "",
           mix_genre: project.mix_genre || "",
         });
-
-        console.log("Form reset complete.");
       } catch (error) {
         toast({
-          description: "Failed to lead project details.",
+          description: "Failed to load project details.",
         });
-        console.error("Failed to load project details:", error);
+        console.error("Fetch Project Error:", error);
       }
     }
+
     fetchProject();
   }, [isOpen, projectId, form, toast]);
 

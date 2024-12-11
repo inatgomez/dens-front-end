@@ -97,7 +97,19 @@ const CreateNewProjectForm: React.FC<CreateNewProjectFormProps> = ({
   }
 
   return (
-    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+    <Dialog
+      open={isDialogOpen}
+      onOpenChange={(open) => {
+        setIsDialogOpen(open);
+        if (open) {
+          form.reset({
+            name: "Untitled",
+            main_genre: "",
+            mix_genre: "",
+          });
+        }
+      }}
+    >
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent>
         <DialogHeader>
