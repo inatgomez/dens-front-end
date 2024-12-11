@@ -1,7 +1,6 @@
 import * as React from "react";
 import {
   Dialog,
-  DialogTrigger,
   DialogContent,
   DialogHeader,
   DialogTitle,
@@ -30,11 +29,13 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { getProject, editProject } from "@/services/projectService";
+import { Project } from "./nav-projects";
 
 interface EditProjectFormProps {
   projectId: string;
   isOpen: boolean;
   onClose: () => void;
+  onUpdateProject: (updatedProject: Project) => void;
 }
 
 const GENRES = [
@@ -67,6 +68,7 @@ const EditProjectForm: React.FC<EditProjectFormProps> = ({
   projectId,
   isOpen,
   onClose,
+  onUpdateProject,
 }) => {
   const { toast } = useToast();
 
@@ -81,18 +83,27 @@ const EditProjectForm: React.FC<EditProjectFormProps> = ({
 
   React.useEffect(() => {
     async function fetchProject() {
-      if (isOpen) {
-        try {
-          const project = await getProject(projectId);
-          form.reset(project);
-        } catch (error) {
-          toast({
-            description: "Failed to lead project details.",
-          });
-          console.error("Failed to load project details:", error);
-        }
+      if (!isOpen || !projectId) {
+        console.log("Early return - conditions not met");
+        return;
+      }
+
+      try {
+        const project = await getProject(projectId);
+
+        form.reset({
+          name: project.name || "Untitled",
+          main_genre: project.main_genre || "",
+          mix_genre: project.mix_genre || "",
+        });
+      } catch (error) {
+        toast({
+          description: "Failed to load project details.",
+        });
+        console.error("Fetch Project Error:", error);
       }
     }
+
     fetchProject();
   }, [isOpen, projectId, form, toast]);
 
@@ -104,6 +115,8 @@ const EditProjectForm: React.FC<EditProjectFormProps> = ({
         toast({
           description: "Success! Your project has been updated.",
         });
+        console.log("Form values o submit:", values);
+        onUpdateProject(data);
         onClose();
       }
     } catch (error) {
@@ -115,10 +128,19 @@ const EditProjectForm: React.FC<EditProjectFormProps> = ({
   }
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent>
+    <Dialog
+      open={isOpen}
+      onOpenChange={(state) => {
+        console.log("Dialog state changed to:", state);
+        if (!state) onClose();
+      }}
+    >
+      <DialogContent aria-describedby='project-edit-description'>
         <DialogHeader>
           <DialogTitle>Edit Project</DialogTitle>
+          <p id='project-edit-description' className='sr-only'>
+            Edit the details of your project
+          </p>
         </DialogHeader>
         <Form {...form}>
           <form

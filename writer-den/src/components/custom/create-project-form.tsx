@@ -30,9 +30,11 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { createProject } from "@/services/projectService";
+import { Project } from "./nav-projects";
 
 interface CreateNewProjectFormProps {
   children: React.ReactNode;
+  onAddProject: (newProject: Project) => void;
 }
 
 const GENRES = [
@@ -63,6 +65,7 @@ const formSchema = z.object({
 
 const CreateNewProjectForm: React.FC<CreateNewProjectFormProps> = ({
   children,
+  onAddProject,
 }) => {
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
 
@@ -79,10 +82,11 @@ const CreateNewProjectForm: React.FC<CreateNewProjectFormProps> = ({
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      await createProject(values);
+      const newProject = await createProject(values);
       toast({
         description: "Success! Your project has been created.",
       });
+      onAddProject(newProject);
     } catch (error) {
       toast({
         description: "Failed to create project. Try again.",
@@ -93,7 +97,19 @@ const CreateNewProjectForm: React.FC<CreateNewProjectFormProps> = ({
   }
 
   return (
-    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+    <Dialog
+      open={isDialogOpen}
+      onOpenChange={(open) => {
+        setIsDialogOpen(open);
+        if (open) {
+          form.reset({
+            name: "Untitled",
+            main_genre: "",
+            mix_genre: "",
+          });
+        }
+      }}
+    >
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent>
         <DialogHeader>

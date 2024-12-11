@@ -1,3 +1,5 @@
+import * as React from "react";
+
 import {
   SquarePen,
   Webhook,
@@ -30,8 +32,9 @@ import {
 import { NavProjects, NavProjectsSkeleton } from "./nav-projects";
 
 import { ChevronUp, User2 } from "lucide-react";
-import * as React from "react";
 import { CreateNewProjectForm } from "./create-project-form";
+import { Project } from "./nav-projects";
+import { getProjects } from "@/services/projectService";
 
 const items = [
   {
@@ -57,6 +60,36 @@ const items = [
 ];
 
 export function AppSidebar() {
+  const [projects, setProjects] = React.useState<Project[]>([]);
+
+  React.useEffect(() => {
+    async function fetchProjects() {
+      const data = await getProjects();
+      setProjects(data);
+    }
+
+    fetchProjects();
+  }, []);
+
+  const handleAddProject = (newProject: Project) => {
+    setProjects((prev) => [...prev, newProject]);
+  };
+
+  const handleUpdateProject = (updatedProject: Project) => {
+    setProjects((prev) =>
+      prev.map((project) =>
+        project.unique_id === updatedProject.unique_id
+          ? updatedProject
+          : project
+      )
+    );
+  };
+
+  const handleDeleteProject = (projectId: string) => {
+    setProjects((prev) =>
+      prev.filter((project) => project.unique_id !== projectId)
+    );
+  };
   return (
     <Sidebar variant='inset' collapsible='icon'>
       <SidebarContent>
@@ -83,14 +116,18 @@ export function AppSidebar() {
         <SidebarSeparator />
         <SidebarGroup>
           <SidebarGroupLabel>Projects</SidebarGroupLabel>
-          <CreateNewProjectForm>
+          <CreateNewProjectForm onAddProject={handleAddProject}>
             <SidebarGroupAction title='New Project'>
               <Plus /> <span className='sr-only'>New Project</span>
             </SidebarGroupAction>
           </CreateNewProjectForm>
           <SidebarGroupContent>
             <React.Suspense fallback={<NavProjectsSkeleton />}>
-              <NavProjects />
+              <NavProjects
+                projects={projects}
+                onUpdateProject={handleUpdateProject}
+                onDeleteProject={handleDeleteProject}
+              />
             </React.Suspense>
           </SidebarGroupContent>
         </SidebarGroup>

@@ -21,14 +21,23 @@ import { useToast } from "@/hooks/use-toast";
 
 import { EditProjectForm } from "./edit-project-form";
 
-interface Project {
+export interface Project {
   unique_id: string;
   name: string;
   message?: string;
 }
 
-function NavProjects() {
-  const [projects, setProjects] = React.useState<Project[]>([]);
+interface NavProjectsProps {
+  projects: Project[];
+  onUpdateProject: (updatedProject: Project) => void;
+  onDeleteProject: (projectId: string) => void;
+}
+
+function NavProjects({
+  projects,
+  onUpdateProject,
+  onDeleteProject,
+}: NavProjectsProps) {
   const [editDialogOpen, setEditDialogOpen] = React.useState<string | null>(
     null
   );
@@ -36,12 +45,8 @@ function NavProjects() {
   const { toast } = useToast();
 
   React.useEffect(() => {
-    async function fetchProjects() {
-      const data = await getProjects();
-      setProjects(data);
-    }
-    fetchProjects();
-  }, []);
+    console.log("State changed: editDialogOpen =", editDialogOpen);
+  }, [editDialogOpen]);
 
   async function onClickDelete(unique_id: string) {
     try {
@@ -50,7 +55,7 @@ function NavProjects() {
         toast({
           description: "Your project has been deleted.",
         });
-        setProjects((prev) => prev.filter((p) => p.unique_id !== unique_id));
+        onDeleteProject(unique_id);
       }
     } catch (error) {
       toast({
@@ -82,7 +87,16 @@ function NavProjects() {
               className='p-2 rounded-md border border-slate-600 bg-slate-950 text-slate-50 text-sm'
             >
               <DropdownMenuItem
-                onClick={() => setEditDialogOpen(project.unique_id)}
+                onClick={() => {
+                  console.log(
+                    "Dropdown item clicked, current state:",
+                    "editDialogOpen:",
+                    editDialogOpen,
+                    "project.unique_id:",
+                    project.unique_id
+                  );
+                  setEditDialogOpen(project.unique_id);
+                }}
                 className='cursor-default focus:bg-slate-700 focus:text-slate-50 outline-none rounded-sm px-2 py-1.5 transition-colors'
               >
                 <span>Edit Project</span>
@@ -98,7 +112,11 @@ function NavProjects() {
           <EditProjectForm
             projectId={project.unique_id}
             isOpen={editDialogOpen === project.unique_id}
-            onClose={() => setEditDialogOpen(null)}
+            onClose={() => {
+              console.log("Closing dialog, resetting editDialogOpen to null.");
+              setEditDialogOpen(null);
+            }}
+            onUpdateProject={onUpdateProject}
           />
         </SidebarMenuItem>
       ))}
