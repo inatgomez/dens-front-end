@@ -5,13 +5,14 @@ import {
   CollapsibleTrigger,
   CollapsibleContent,
 } from "@/components/ui/collapsible";
-import { ChevronDownIcon } from "lucide-react";
+import { ChevronDown, TrashIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-import { IdeaEditorProps } from "./idea-input-chat";
+import { useToast } from "@/hooks/use-toast";
+
 import { IdeaInputChat } from "./idea-input-chat";
 
-import { getIdeas } from "@/services/ideaService";
+import { getIdeas, deleteIdea } from "@/services/ideaService";
 
 interface Idea {
   unique_id: string;
@@ -26,6 +27,7 @@ interface IdeasListProps {
   projectId: string;
 }
 export default function IdeasList({ projectId }: IdeasListProps) {
+  const { toast } = useToast();
   const [ideas, setIdeas] = useState<Idea[]>([]);
   const [loading, setLoading] = useState(true);
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -39,6 +41,24 @@ export default function IdeasList({ projectId }: IdeasListProps) {
     fetchIdeas();
   }, [projectId]);
 
+  async function handleDeleteIdea(unique_id: string) {
+    try {
+      const response = await deleteIdea(unique_id);
+      if (response.ok) {
+        toast({
+          description: "Idea deleted successfully",
+        });
+        setIdeas((prev) => prev.filter((idea) => idea.unique_id !== unique_id));
+      }
+    } catch (error) {
+      toast({
+        description: "Failed to delete idea",
+      });
+      console.error("Failed to delete idea:", error);
+    }
+    console.log("Idea id:", unique_id);
+  }
+
   if (loading) return <p className='text-base text-slate-50'>Loading...</p>;
 
   return (
@@ -47,17 +67,29 @@ export default function IdeasList({ projectId }: IdeasListProps) {
         <Collapsible
           open={isCollapsed}
           onOpenChange={setIsCollapsed}
-          className='my-8 bg-slate-600 shadow-sm shadow-slate-700 rounded-sm w-[80%]'
+          className='mt-8 mb-4 bg-slate-600 shadow-sm shadow-slate-700 rounded-sm w-[80%]'
           key={idea.unique_id}
         >
-          <div className='flex items-center justify-between gap-6 mx-auto p-4 sm:px-4 xl:gap-8'>
+          <div className='flex items-center justify-between gap-2 mx-auto p-4 sm:px-4 xl:gap-8'>
             <h2 className='text-xl text-slate-50'>{idea.title}</h2>
-            <CollapsibleTrigger asChild>
-              <Button variant='default' size='icon'>
-                <ChevronDownIcon className='w-4 h-4' />
-                <span className='sr-only'>Expand</span>
+            <div className='flex items-center self-end gap-2'>
+              <CollapsibleTrigger asChild>
+                <Button variant='default' size='icon'>
+                  <ChevronDown className='w-4 h-4' />
+                  <span className='sr-only'>Expand</span>
+                </Button>
+              </CollapsibleTrigger>
+              <Button
+                variant='default'
+                size='icon'
+                onClick={() => {
+                  handleDeleteIdea(idea.unique_id);
+                }}
+              >
+                <TrashIcon className='w-4 h-4' />
+                <span className='sr-only'>Delete</span>
               </Button>
-            </CollapsibleTrigger>
+            </div>
           </div>
           <CollapsibleContent className='space-y-2 w-full'>
             <IdeaInputChat />
