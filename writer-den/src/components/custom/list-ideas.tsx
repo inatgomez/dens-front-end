@@ -1,4 +1,16 @@
 import React, { useState, useEffect } from "react";
+
+import {
+  Collapsible,
+  CollapsibleTrigger,
+  CollapsibleContent,
+} from "@/components/ui/collapsible";
+import { ChevronDownIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
+
+import { IdeaEditorProps } from "./idea-input-chat";
+import { IdeaInputChat } from "./idea-input-chat";
+
 import { getIdeas } from "@/services/ideaService";
 
 interface Idea {
@@ -7,8 +19,6 @@ interface Idea {
   title: string;
   category: string;
   project: string;
-  created_at: string;
-  updated_at?: string;
   message?: string;
 }
 
@@ -18,6 +28,7 @@ interface IdeasListProps {
 export default function IdeasList({ projectId }: IdeasListProps) {
   const [ideas, setIdeas] = useState<Idea[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   useEffect(() => {
     async function fetchIdeas() {
@@ -31,28 +42,28 @@ export default function IdeasList({ projectId }: IdeasListProps) {
   if (loading) return <p className='text-base text-slate-50'>Loading...</p>;
 
   return (
-    <div className='flex flex-col items-center mt-6 bg-slate-700 shadow-sm shadow-slate-800 rounded-sm gap-6 mx-auto max-w-2xl p-4 sm:px-4 lg:max-w-7xl xl:gap-8'>
+    <>
       {ideas.map((idea) => (
-        <a key={idea.unique_id || idea.message} href='#' className='group'>
-          <div className='my-2 max-h-44 max-w-4xl overflow-hidden  px-4 py-6'>
-            <h2 className='text-xl text-slate-50'>
-              {idea.title || idea.message}
-            </h2>
-            {idea.category && (
-              <p className='text-base text-slate-50'>{idea.category}</p>
-            )}
-            {idea.created_at && (
-              <p className='text-sm text-slate-50'>
-                Created on:
-                {new Date(idea.created_at).toLocaleDateString()}
-              </p>
-            )}
-            {idea.content && (
-              <p className='text-base text-slate-50'>{idea.content}</p>
-            )}
+        <Collapsible
+          open={isCollapsed}
+          onOpenChange={setIsCollapsed}
+          className='my-8 bg-slate-600 shadow-sm shadow-slate-700 rounded-sm w-[80%]'
+          key={idea.unique_id}
+        >
+          <div className='flex items-center justify-between gap-6 mx-auto p-4 sm:px-4 xl:gap-8'>
+            <h2 className='text-xl text-slate-50'>{idea.title}</h2>
+            <CollapsibleTrigger asChild>
+              <Button variant='default' size='icon'>
+                <ChevronDownIcon className='w-4 h-4' />
+                <span className='sr-only'>Expand</span>
+              </Button>
+            </CollapsibleTrigger>
           </div>
-        </a>
+          <CollapsibleContent className='space-y-2 w-full'>
+            <IdeaInputChat />
+          </CollapsibleContent>
+        </Collapsible>
       ))}
-    </div>
+    </>
   );
 }
