@@ -12,7 +12,7 @@ import { useToast } from "@/hooks/use-toast";
 
 import { IdeaInputChat } from "./idea-input-chat";
 
-import { getIdeas, deleteIdea } from "@/services/ideaService";
+import { getIdeas, deleteIdea, editIdea } from "@/services/ideaService";
 
 interface Idea {
   unique_id: string;
@@ -26,7 +26,11 @@ interface Idea {
 interface IdeasListProps {
   projectId: string;
 }
-export default function IdeasList({ projectId }: IdeasListProps) {
+
+const truncateText = (text: string, limit: number) =>
+  text.length > limit ? `${text.slice(0, limit)}...` : text;
+
+function IdeasList({ projectId }: IdeasListProps) {
   const { toast } = useToast();
   const [ideas, setIdeas] = useState<Idea[]>([]);
   const [loading, setLoading] = useState(true);
@@ -59,6 +63,28 @@ export default function IdeasList({ projectId }: IdeasListProps) {
     console.log("Idea id:", unique_id);
   }
 
+  async function handleUpdateIdea(
+    unique_id: string,
+    ideaData: {
+      content: string;
+      category: string;
+      projectId: string;
+    }
+  ) {
+    try {
+      const response = await editIdea(unique_id, ideaData);
+      if (response.ok) {
+        toast({
+          description: "Idea updated successfully",
+        });
+      }
+    } catch (error) {
+      toast({
+        description: "Failed to update idea",
+      });
+    }
+  }
+
   if (loading) return <p className='text-base text-slate-50'>Loading...</p>;
 
   return (
@@ -71,7 +97,9 @@ export default function IdeasList({ projectId }: IdeasListProps) {
           key={idea.unique_id}
         >
           <div className='flex items-center justify-between gap-2 mx-auto p-4 sm:px-4 xl:gap-8'>
-            <h2 className='text-xl text-slate-50'>{idea.title}</h2>
+            <h2 className='text-xl text-slate-50'>
+              {truncateText(idea.content, 30)}
+            </h2>
             <div className='flex items-center self-end gap-2'>
               <CollapsibleTrigger asChild>
                 <Button variant='default' size='icon'>
@@ -92,10 +120,21 @@ export default function IdeasList({ projectId }: IdeasListProps) {
             </div>
           </div>
           <CollapsibleContent className='space-y-2 w-full'>
-            <IdeaInputChat />
+            <IdeaInputChat
+              value={idea.content}
+              onChange={(content) => {
+                handleUpdateIdea(idea.unique_id, {
+                  content: JSON.stringify(content),
+                  category: idea.category,
+                  projectId: idea.project,
+                });
+              }}
+            />
           </CollapsibleContent>
         </Collapsible>
       ))}
     </>
   );
 }
+
+export default IdeasList;

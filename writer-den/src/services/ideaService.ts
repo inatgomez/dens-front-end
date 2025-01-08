@@ -1,7 +1,7 @@
 export async function getIdeas(projectId: string) {
   try {
     const response = await fetch(
-      `http://localhost:8000/ideasrecording/ideas/${projectId}`
+      `http://localhost:8000/ideasrecording/ideas/${projectId}/ideas`
     );
     if (!response.ok) {
       throw new Error("Failed to fecth ideas.");
@@ -27,7 +27,7 @@ export async function createIdea(
 ) {
   try {
     const response = await fetch(
-      `http://localhost:8000/ideasrecording/ideas/${projectId}`,
+      `http://localhost:8000/ideasrecording/ideas/${projectId}/ideas`,
       {
         method: "POST",
         headers: {
@@ -52,7 +52,6 @@ export async function createIdea(
 export async function editIdea(
   unique_id: string,
   ideaData: {
-    title: string;
     content: string;
     category: string;
     projectId: string;
@@ -88,6 +87,9 @@ export async function deleteIdea(unique_id: string) {
       `http://localhost:8000/ideasrecording/ideas/${unique_id}`,
       {
         method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
       }
     );
 
