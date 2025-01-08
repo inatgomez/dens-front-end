@@ -27,6 +27,9 @@ export interface IdeaEditorProps
   onChange?: (value: Content) => void;
   className?: string;
   editorContentClassName?: string;
+  project?: string;
+  category?: string;
+  isEditing?: boolean;
 }
 
 interface Project {
@@ -44,7 +47,19 @@ const CATEGORY_OPTIONS = [
 ];
 
 export const IdeaInputChat = React.forwardRef<HTMLDivElement, IdeaEditorProps>(
-  ({ value, onChange, className, editorContentClassName, ...props }, ref) => {
+  (
+    {
+      value,
+      onChange,
+      className,
+      editorContentClassName,
+      project,
+      category,
+      isEditing = false,
+      ...props
+    },
+    ref
+  ) => {
     const editor = useMinimalTiptapEditor({
       value,
       onUpdate: onChange,
@@ -68,6 +83,13 @@ export const IdeaInputChat = React.forwardRef<HTMLDivElement, IdeaEditorProps>(
       }
       fetchProjects();
     }, []);
+
+    React.useEffect(() => {
+      if (isEditing && project && category) {
+        setSelectedProject(project);
+        setSelectedCategory(category);
+      }
+    }, [isEditing, project, category]);
 
     const handleSaveIdea = async () => {
       if (!editor) return;
@@ -134,33 +156,40 @@ export const IdeaInputChat = React.forwardRef<HTMLDivElement, IdeaEditorProps>(
           {editor.storage.characterCount.characters()} / {limit}
         </div>
         <div className='flex items-center justify-end gap-1 px-6 my-4'>
-          <Select onValueChange={setSelectedProject}>
-            <SelectTrigger>
-              <SelectValue placeholder='Select Project' />
-            </SelectTrigger>
-            <SelectContent>
-              {projects.map((project) => (
-                <SelectItem key={project.unique_id} value={project.unique_id}>
-                  {project.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Select onValueChange={setSelectedCategory}>
-            <SelectTrigger>
-              <SelectValue placeholder='Select Category' />
-            </SelectTrigger>
-            <SelectContent>
-              {CATEGORY_OPTIONS.map((category) => (
-                <SelectItem key={category} value={category}>
-                  {category}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Button variant='default' size='icon' onClick={handleSaveIdea}>
-            <Send />
-          </Button>
+          {!isEditing && (
+            <>
+              <Select onValueChange={setSelectedProject}>
+                <SelectTrigger>
+                  <SelectValue placeholder='Select Project' />
+                </SelectTrigger>
+                <SelectContent>
+                  {projects.map((project) => (
+                    <SelectItem
+                      key={project.unique_id}
+                      value={project.unique_id}
+                    >
+                      {project.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Select onValueChange={setSelectedCategory}>
+                <SelectTrigger>
+                  <SelectValue placeholder='Select Category' />
+                </SelectTrigger>
+                <SelectContent>
+                  {CATEGORY_OPTIONS.map((category) => (
+                    <SelectItem key={category} value={category}>
+                      {category}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Button variant='default' size='icon' onClick={handleSaveIdea}>
+                <Send />
+              </Button>
+            </>
+          )}
         </div>
       </MeasuredContainer>
     );

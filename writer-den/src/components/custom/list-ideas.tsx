@@ -14,6 +14,9 @@ import { IdeaInputChat } from "./idea-input-chat";
 
 import { getIdeas, deleteIdea, editIdea } from "@/services/ideaService";
 
+import { useThrottle } from "@/hooks/use-throttle";
+import { Content } from "@tiptap/react";
+
 interface Idea {
   unique_id: string;
   content: string;
@@ -63,27 +66,36 @@ function IdeasList({ projectId }: IdeasListProps) {
     console.log("Idea id:", unique_id);
   }
 
-  async function handleUpdateIdea(
-    unique_id: string,
-    ideaData: {
-      content: string;
-      category: string;
-      projectId: string;
-    }
-  ) {
-    try {
-      const response = await editIdea(unique_id, ideaData);
-      if (response.ok) {
+  const throttledUpdateIdea = React.useCallback(
+    useThrottle(async (unique_id: string, ideaData: any) => {
+      console.log("Throttled update called");
+      try {
+        const response = await editIdea(unique_id, ideaData);
+        if (response.ok) {
+          toast({
+            description: "Idea updated successfully",
+          });
+        }
+      } catch (error) {
         toast({
-          description: "Idea updated successfully",
+          description: "Failed to update idea",
         });
       }
-    } catch (error) {
-      toast({
-        description: "Failed to update idea",
+    }, 1000),
+    [toast]
+  );
+
+  const handleIdeaChange = React.useCallback(
+    (idea: Idea) => (content: Content) => {
+      console.log("onChange called");
+      throttledUpdateIdea(idea.unique_id, {
+        content: JSON.stringify(content),
+        category: idea.category,
+        projectId: idea.project,
       });
-    }
-  }
+    },
+    [throttledUpdateIdea]
+  );
 
   if (loading) return <p className='text-base text-slate-50'>Loading...</p>;
 
@@ -122,13 +134,10 @@ function IdeasList({ projectId }: IdeasListProps) {
           <CollapsibleContent className='space-y-2 w-full'>
             <IdeaInputChat
               value={idea.content}
-              onChange={(content) => {
-                handleUpdateIdea(idea.unique_id, {
-                  content: JSON.stringify(content),
-                  category: idea.category,
-                  projectId: idea.project,
-                });
-              }}
+              project={idea.project}
+              category={idea.category}
+              isEditing={true}
+              onChange={handleIdeaChange(idea)}
             />
           </CollapsibleContent>
         </Collapsible>
