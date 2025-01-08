@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import * as React from "react";
 
 import {
   Collapsible,
@@ -21,9 +21,7 @@ import { useToast } from "@/hooks/use-toast";
 import { EditIdeaChat } from "./edit-idea-chat";
 
 import { getIdeas, deleteIdea, editIdea } from "@/services/ideaService";
-
-import { useThrottle } from "@/hooks/use-throttle";
-import { Content } from "@tiptap/react";
+import { getProjects } from "@/services/projectService";
 
 interface Idea {
   unique_id: string;
@@ -34,20 +32,43 @@ interface Idea {
   message?: string;
 }
 
+interface Project {
+  unique_id: string;
+  name: string;
+}
+
 interface IdeasListProps {
   projectId: string;
 }
+
+const CATEGORY_OPTIONS = [
+  "PLOT",
+  "CHARACTER",
+  "THEME",
+  "SETTING",
+  "RESEARCH",
+  "RANDOM",
+];
 
 const truncateText = (text: string, limit: number) =>
   text.length > limit ? `${text.slice(0, limit)}...` : text;
 
 function IdeasList({ projectId }: IdeasListProps) {
+  const [ideas, setIdeas] = React.useState<Idea[]>([]);
+  const [projects, setProjects] = React.useState<Project[]>([]);
+  const [loading, setLoading] = React.useState(true);
+  const [isCollapsed, setIsCollapsed] = React.useState(false);
   const { toast } = useToast();
-  const [ideas, setIdeas] = useState<Idea[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [isCollapsed, setIsCollapsed] = useState(false);
 
-  useEffect(() => {
+  React.useEffect(() => {
+    async function fetchProjects() {
+      const projectsData = await getProjects();
+      setProjects(projectsData);
+    }
+    fetchProjects();
+  }, []);
+
+  React.useEffect(() => {
     async function fetchIdeas() {
       const data = await getIdeas(projectId);
       setIdeas(data);
@@ -74,35 +95,37 @@ function IdeasList({ projectId }: IdeasListProps) {
     console.log("Idea id:", unique_id);
   }
 
-  const throttledUpdateIdea = React.useCallback(
-    useThrottle(async (unique_id: string, ideaData: any) => {
-      console.log("Throttled update called");
+  const handleUpdateIdea = React.useCallback(
+    async (
+      idea: Idea,
+      updates: {
+        content?: string;
+        category?: string;
+        projectId?: string;
+      }
+    ) => {
       try {
-        const response = await editIdea(unique_id, ideaData);
+        const response = await editIdea(idea.unique_id, {
+          content: updates.content || idea.content,
+          category: updates.category || idea.category,
+          projectId: updates.projectId || idea.project,
+        });
+
         if (response.ok) {
+          setIdeas((prev) =>
+            prev.map((i) =>
+              i.unique_id === idea.unique_id ? { ...i, ...updates } : i
+            )
+          );
           toast({
             description: "Idea updated successfully",
           });
         }
       } catch (error) {
-        toast({
-          description: "Failed to update idea",
-        });
+        toast({ description: "Failed to update idea" });
       }
-    }, 1000),
-    [toast]
-  );
-
-  const handleIdeaChange = React.useCallback(
-    (idea: Idea) => (content: Content) => {
-      console.log("onChange called");
-      throttledUpdateIdea(idea.unique_id, {
-        content: JSON.stringify(content),
-        category: idea.category,
-        projectId: idea.project,
-      });
     },
-    [throttledUpdateIdea]
+    [toast]
   );
 
   if (loading) return <p className='text-base text-slate-50'>Loading...</p>;
@@ -140,13 +163,58 @@ function IdeasList({ projectId }: IdeasListProps) {
             </div>
           </div>
           <CollapsibleContent className='space-y-2 w-full'>
-            <IdeaInputChat
+            <EditIdeaChat
               value={idea.content}
-              project={idea.project}
-              category={idea.category}
-              isEditing={true}
-              onChange={handleIdeaChange(idea)}
+              onChange={(content) =>
+                handleUpdateIdea(idea, { content: JSON.stringify(content) })
+              }
             />
+            <div className='flex items-center justify-end gap-1 px-6 my-4'>
+              <Select
+                defaultValue={idea.project}
+                onValueChange={(value) =>
+                  handleUpdateIdea(idea, { projectId: value })
+                }
+              >
+                <SelectTrigger className='w-[180px]'>
+                  <SelectValue placeholder='Select Project' />
+                </SelectTrigger>
+                <SelectContent>
+                  {projects.map((project) => (
+                    <SelectItem
+                      key={project.unique_id}
+                      value={project.unique_id}
+                    >
+                      {project.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Select
+                defaultValue={idea.category}
+                onValueChange={(value) =>
+                  handleUpdateIdea(idea, { category: value })
+                }
+              >
+                <SelectTrigger className='w-[180px]'>
+                  <SelectValue placeholder='Select Category' />
+                </SelectTrigger>
+                <SelectContent>
+                  {CATEGORY_OPTIONS.map((category) => (
+                    <SelectItem key={category} value={category}>
+                      {category}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Button
+                variant='default'
+                size='icon'
+                onClick={() => handleUpdateIdea(idea, {})}
+              >
+                <Send />
+              </Button>
+            </div>
           </CollapsibleContent>
         </Collapsible>
       ))}
