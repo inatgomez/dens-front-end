@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useState } from "react";
 
 import {
   Collapsible,
@@ -22,6 +23,7 @@ import { EditIdeaChat } from "./edit-idea-chat";
 
 import { getIdeas, deleteIdea, editIdea } from "@/services/ideaService";
 import { getProjects } from "@/services/projectService";
+import { Content } from "@tiptap/react";
 
 interface Idea {
   unique_id: string;
@@ -59,6 +61,9 @@ function IdeasList({ projectId }: IdeasListProps) {
   const [loading, setLoading] = React.useState(true);
   const [isCollapsed, setIsCollapsed] = React.useState(false);
   const { toast } = useToast();
+  const [editedContent, setEditedContent] = useState<{ [key: string]: string }>(
+    {}
+  );
 
   React.useEffect(() => {
     async function fetchProjects() {
@@ -128,6 +133,42 @@ function IdeasList({ projectId }: IdeasListProps) {
     [toast]
   );
 
+  const handleContentChange = (ideaId: string, content: Content) => {
+    setEditedContent((prev) => ({
+      ...prev,
+      [ideaId]: JSON.stringify(content),
+    }));
+  };
+
+  const handleSaveIdea = async (idea: Idea) => {
+    const newContent = editedContent[idea.unique_id];
+    if (!newContent) return;
+
+    try {
+      const response = await handleUpdateIdea(idea, { content: newContent });
+
+      setIdeas((prev) =>
+        prev.map((idea) =>
+          idea.unique_id === idea.unique_id
+            ? { ...idea, content: newContent }
+            : idea
+        )
+      );
+
+      setEditedContent((prev) => {
+        const updated = { ...prev };
+        delete updated[idea.unique_id];
+        return updated;
+      });
+
+      toast({
+        description: "Idea updated successfully",
+      });
+    } catch (error) {
+      toast({ description: "Failed to update idea" });
+    }
+  };
+
   if (loading) return <p className='text-base text-slate-50'>Loading...</p>;
 
   return (
@@ -162,14 +203,14 @@ function IdeasList({ projectId }: IdeasListProps) {
               </Button>
             </div>
           </div>
-          <CollapsibleContent className='space-y-2 w-full'>
+          <CollapsibleContent className='space-y-4 w-full p-4'>
             <EditIdeaChat
               value={idea.content}
               onChange={(content) =>
-                handleUpdateIdea(idea, { content: JSON.stringify(content) })
+                handleContentChange(idea.unique_id, content)
               }
             />
-            <div className='flex items-center justify-end gap-1 p-6 my-4'>
+            <div className='flex items-center justify-end gap-2'>
               <Select
                 defaultValue={idea.project}
                 onValueChange={(value) =>
@@ -210,7 +251,7 @@ function IdeasList({ projectId }: IdeasListProps) {
               <Button
                 variant='default'
                 size='icon'
-                onClick={() => handleUpdateIdea(idea, {})}
+                onClick={() => handleSaveIdea(idea)}
               >
                 <Send />
               </Button>
