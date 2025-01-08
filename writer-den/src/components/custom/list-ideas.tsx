@@ -169,7 +169,7 @@ function IdeasList({ projectId }: IdeasListProps) {
                 handleUpdateIdea(idea, { content: JSON.stringify(content) })
               }
             />
-            <div className='flex items-center justify-end gap-1 px-6 my-4'>
+            <div className='flex items-center justify-end gap-1 p-6 my-4'>
               <Select
                 defaultValue={idea.project}
                 onValueChange={(value) =>
