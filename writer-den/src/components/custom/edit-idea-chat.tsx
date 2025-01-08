@@ -21,7 +21,7 @@ export const EditIdeaChat = React.forwardRef<
   EditIdeaEditorProps
 >(({ value, onChange, className, editorContentClassName, ...props }, ref) => {
   const debouncedOnChange = React.useMemo(
-    () => debounce((value: Content) => onChange?.(value), 1000),
+    () => debounce((value: Content) => onChange?.(value), 5000),
     [onChange]
   );
 
@@ -41,7 +41,7 @@ export const EditIdeaChat = React.forwardRef<
       name='editor'
       ref={ref}
       className={cn(
-        "flex flex-col max-h-96 w-full rounded-xl shadow-md bg-slate-600",
+        "flex flex-col max-h-96 w-full rounded-xl bg-slate-600",
         className
       )}
     >
