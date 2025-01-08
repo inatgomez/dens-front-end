@@ -7,10 +7,18 @@ import {
 } from "@/components/ui/collapsible";
 import { ChevronDown, TrashIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
+import { Send } from "lucide-react";
 
 import { useToast } from "@/hooks/use-toast";
 
-import { IdeaInputChat } from "./idea-input-chat";
+import { EditIdeaChat } from "./edit-idea-chat";
 
 import { getIdeas, deleteIdea, editIdea } from "@/services/ideaService";
 

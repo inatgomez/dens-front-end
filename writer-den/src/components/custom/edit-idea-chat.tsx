@@ -1,13 +1,5 @@
 import * as React from "react";
 import { ScrollArea } from "../ui/scroll-area";
-import { Button } from "../ui/button";
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from "../ui/select";
 import { EditorContent } from "@tiptap/react";
 import { cn } from "@/lib/utils";
 import { useMinimalTiptapEditor, limit } from "../../hooks/use-minimal-tiptap";
@@ -15,8 +7,6 @@ import { MeasuredContainer } from "../minimal-tiptap/measured-container";
 import type { Content } from "@tiptap/react";
 import type { UseMinimalTiptapEditorProps } from "../../hooks/use-minimal-tiptap";
 import { debounce } from "lodash";
-import { useToast } from "@/hooks/use-toast";
-import { Send } from "lucide-react";
 
 export interface EditIdeaEditorProps
   extends Omit<UseMinimalTiptapEditorProps, "onUpdate"> {
