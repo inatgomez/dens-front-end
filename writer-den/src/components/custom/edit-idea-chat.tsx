@@ -21,7 +21,7 @@ export const EditIdeaChat = React.forwardRef<
   EditIdeaEditorProps
 >(({ value, onChange, className, editorContentClassName, ...props }, ref) => {
   const debouncedOnChange = React.useMemo(
-    () => debounce((value: Content) => onChange?.(value), 5000),
+    () => debounce((value: Content) => onChange?.(value), 2000),
     [onChange]
   );
 

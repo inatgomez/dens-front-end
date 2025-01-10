@@ -164,10 +164,8 @@ function IdeasList({ projectId }: IdeasListProps) {
       await handleUpdateIdea(idea, { content: newContent });
 
       setIdeas((prev) =>
-        prev.map((idea) =>
-          idea.unique_id === idea.unique_id
-            ? { ...idea, content: newContent }
-            : idea
+        prev.map((i) =>
+          i.unique_id === idea.unique_id ? { ...idea, content: newContent } : i
         )
       );
 
