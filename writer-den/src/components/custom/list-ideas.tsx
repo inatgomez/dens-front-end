@@ -160,7 +160,7 @@ function IdeasList({ projectId }: IdeasListProps) {
       typeof content === "string" ? content : JSON.stringify(content);
     setEditedContent((prev) => ({
       ...prev,
-      [ideaId]: JSON.stringify(contentValue),
+      [ideaId]: contentValue,
     }));
   };
 
@@ -169,10 +169,7 @@ function IdeasList({ projectId }: IdeasListProps) {
     if (!newContent) return;
 
     try {
-      const contentToSend =
-        typeof newContent === "string"
-          ? newContent.replace(/^"|"$/g, "")
-          : JSON.stringify(newContent);
+      const contentToSend = newContent.replace(/^"|"$/g, "");
 
       await handleUpdateIdea(idea, { content: contentToSend });
 
