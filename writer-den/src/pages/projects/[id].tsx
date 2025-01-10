@@ -40,7 +40,7 @@ export default function ProjectPage() {
     <Layout>
       <div className='flex flex-col col-span-4 items-center p-4 min-h-screen'>
         <h1 className='text-3xl text-slate-50 font-bold'>{project.name}</h1>
-        <p className='text-xl text-slate-50'>
+        <p className='mb-2 text-xl text-slate-50'>
           {project.main_genre} / {project.mix_genre}
         </p>
         <IdeasList projectId={id as string} />

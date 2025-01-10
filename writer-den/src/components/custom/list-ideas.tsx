@@ -230,7 +230,7 @@ function IdeasList({ projectId }: IdeasListProps) {
           onOpenChange={(isOpen) =>
             handleCollapsibleChange(idea.unique_id, isOpen)
           }
-          className='mt-8 mb-4 bg-slate-600 shadow-sm shadow-slate-700 rounded-sm w-[80%]'
+          className='my-2 bg-slate-600 shadow-sm shadow-slate-700 rounded-sm w-[80%]'
         >
           <div className='flex items-center justify-between gap-2 mx-auto p-4 sm:px-4 xl:gap-8'>
             <h2 className='text-xl text-slate-50'>
