@@ -17,6 +17,15 @@ import {
 } from "@/components/ui/select";
 import { Send } from "lucide-react";
 
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+} from "@/components/ui/dialog";
+
 import { useToast } from "@/hooks/use-toast";
 
 import { EditIdeaChat } from "./edit-idea-chat";
@@ -59,7 +68,14 @@ function IdeasList({ projectId }: IdeasListProps) {
   const [ideas, setIdeas] = React.useState<Idea[]>([]);
   const [projects, setProjects] = React.useState<Project[]>([]);
   const [loading, setLoading] = React.useState(true);
-  const [isCollapsed, setIsCollapsed] = React.useState(false);
+  const [showUnsavedChangesDialog, setShowUnsavedChangesDialog] =
+    React.useState(false);
+  const [ideaToCollapse, setIdeaToCollapse] = React.useState<string | null>(
+    null
+  );
+  const [collapsedStates, setCollapsedStates] = React.useState<{
+    [key: string]: boolean;
+  }>({});
   const { toast } = useToast();
   const [editedContent, setEditedContent] = useState<{ [key: string]: string }>(
     {}
@@ -145,7 +161,7 @@ function IdeasList({ projectId }: IdeasListProps) {
     if (!newContent) return;
 
     try {
-      const response = await handleUpdateIdea(idea, { content: newContent });
+      await handleUpdateIdea(idea, { content: newContent });
 
       setIdeas((prev) =>
         prev.map((idea) =>
@@ -169,16 +185,52 @@ function IdeasList({ projectId }: IdeasListProps) {
     }
   };
 
+  const hasUnsavedChanges = (ideaId: string) => {
+    return Boolean(editedContent[ideaId]);
+  };
+
+  const handleCollapsibleChange = (ideaId: string, isOpen: boolean) => {
+    if (!isOpen && hasUnsavedChanges(ideaId)) {
+      setShowUnsavedChangesDialog(true);
+      setIdeaToCollapse(ideaId);
+    } else {
+      setCollapsedStates((prev) => ({
+        ...prev,
+        [ideaId]: isOpen,
+      }));
+    }
+  };
+
+  const handleDiscardChanges = () => {
+    setEditedContent((prev) => {
+      const updated = { ...prev };
+      if (ideaToCollapse) {
+        delete updated[ideaToCollapse];
+      }
+      return updated;
+    });
+    if (ideaToCollapse) {
+      setCollapsedStates((prev) => ({
+        ...prev,
+        [ideaToCollapse]: false,
+      }));
+    }
+    setShowUnsavedChangesDialog(false);
+    setIdeaToCollapse(null);
+  };
+
   if (loading) return <p className='text-base text-slate-50'>Loading...</p>;
 
   return (
     <>
       {ideas.map((idea) => (
         <Collapsible
-          open={isCollapsed}
-          onOpenChange={setIsCollapsed}
-          className='mt-8 mb-4 bg-slate-600 shadow-sm shadow-slate-700 rounded-sm w-[80%]'
           key={idea.unique_id}
+          open={collapsedStates[idea.unique_id]}
+          onOpenChange={(isOpen) =>
+            handleCollapsibleChange(idea.unique_id, isOpen)
+          }
+          className='mt-8 mb-4 bg-slate-600 shadow-sm shadow-slate-700 rounded-sm w-[80%]'
         >
           <div className='flex items-center justify-between gap-2 mx-auto p-4 sm:px-4 xl:gap-8'>
             <h2 className='text-xl text-slate-50'>
@@ -259,6 +311,46 @@ function IdeasList({ projectId }: IdeasListProps) {
           </CollapsibleContent>
         </Collapsible>
       ))}
+
+      <Dialog
+        open={showUnsavedChangesDialog}
+        onOpenChange={setShowUnsavedChangesDialog}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Unsaved Changes</DialogTitle>
+            <DialogDescription className='text-slate-300'>
+              You have unsaved changes. Do you want to save them before closing?
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className='flex gap-2'>
+            <Button
+              variant='outline'
+              onClick={() => {
+                if (ideaToCollapse) {
+                  const idea = ideas.find(
+                    (idea) => idea.unique_id === ideaToCollapse
+                  );
+                  if (idea) {
+                    handleSaveIdea(idea);
+                    setCollapsedStates((prev) => ({
+                      ...prev,
+                      [ideaToCollapse]: false,
+                    }));
+                  }
+                }
+                setShowUnsavedChangesDialog(false);
+                setIdeaToCollapse(null);
+              }}
+            >
+              Save Changes
+            </Button>
+            <Button variant='destructive' onClick={handleDiscardChanges}>
+              Discard Changes
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }
