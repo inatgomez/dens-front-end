@@ -234,7 +234,7 @@ function IdeasList({ projectId }: IdeasListProps) {
         >
           <div className='flex items-center justify-between gap-2 mx-auto p-4 sm:px-4 xl:gap-8'>
             <h2 className='text-xl text-slate-50'>
-              {truncateText(idea.content, 30)}
+              {truncateText(idea.content, 50)}
             </h2>
             <div className='flex items-center self-end gap-2'>
               <CollapsibleTrigger asChild>
