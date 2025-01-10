@@ -314,10 +314,10 @@ function IdeasList({ projectId }: IdeasListProps) {
         open={showUnsavedChangesDialog}
         onOpenChange={setShowUnsavedChangesDialog}
       >
-        <DialogContent>
+        <DialogContent className='flex flex-col items-center justify-center w-[350px] p-6'>
           <DialogHeader>
             <DialogTitle>Unsaved Changes</DialogTitle>
-            <DialogDescription className='text-slate-300'>
+            <DialogDescription className='text-slate-300 text-center p-4'>
               You have unsaved changes. Do you want to save them before closing?
             </DialogDescription>
           </DialogHeader>
