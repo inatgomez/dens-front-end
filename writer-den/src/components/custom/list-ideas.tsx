@@ -33,6 +33,7 @@ import { EditIdeaChat } from "./edit-idea-chat";
 import { getIdeas, deleteIdea, editIdea } from "@/services/ideaService";
 import { getProjects } from "@/services/projectService";
 import { Content } from "@tiptap/react";
+import { string } from "zod";
 
 interface Idea {
   unique_id: string;
@@ -63,6 +64,11 @@ const CATEGORY_OPTIONS = [
 
 const truncateText = (text: string, limit: number) =>
   text.length > limit ? `${text.slice(0, limit)}...` : text;
+
+const stripHtmlTags = (html: string) => {
+  const doc = new DOMParser().parseFromString(html, "text/html");
+  return doc.body.textContent || "";
+};
 
 function IdeasList({ projectId }: IdeasListProps) {
   const [ideas, setIdeas] = React.useState<Idea[]>([]);
@@ -150,9 +156,11 @@ function IdeasList({ projectId }: IdeasListProps) {
   );
 
   const handleContentChange = (ideaId: string, content: Content) => {
+    const contentValue =
+      typeof content === "string" ? content : JSON.stringify(content);
     setEditedContent((prev) => ({
       ...prev,
-      [ideaId]: JSON.stringify(content),
+      [ideaId]: JSON.stringify(contentValue),
     }));
   };
 
@@ -161,7 +169,12 @@ function IdeasList({ projectId }: IdeasListProps) {
     if (!newContent) return;
 
     try {
-      await handleUpdateIdea(idea, { content: newContent });
+      const contentToSend =
+        typeof newContent === "string"
+          ? newContent.replace(/^"|"$/g, "")
+          : JSON.stringify(newContent);
+
+      await handleUpdateIdea(idea, { content: contentToSend });
 
       setIdeas((prev) =>
         prev.map((i) =>
@@ -232,7 +245,7 @@ function IdeasList({ projectId }: IdeasListProps) {
         >
           <div className='flex items-center justify-between gap-2 mx-auto p-4 sm:px-4 xl:gap-8'>
             <h2 className='text-xl text-slate-50'>
-              {truncateText(idea.content, 50)}
+              {truncateText(stripHtmlTags(idea.content), 50)}
             </h2>
             <div className='flex items-center self-end gap-2'>
               <CollapsibleTrigger asChild>
