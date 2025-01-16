@@ -19,6 +19,7 @@ import { searchIdeas } from "@/services/ideaService";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Search } from "lucide-react";
 import Link from "next/link";
+import { SidebarMenuButton } from "../ui/sidebar";
 
 interface SearchResult {
   unique_id: string;
@@ -95,10 +96,10 @@ export function SearchIdeas() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <button className='flex mx-2 items-center gap-2'>
+        <SidebarMenuButton tooltip='Search'>
           <Search className='h-4 w-4' />
           <span>Search</span>
-        </button>
+        </SidebarMenuButton>
       </DialogTrigger>
       <DialogContent className='sm:max-w-[600px]'>
         <DialogHeader>
