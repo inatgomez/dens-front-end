@@ -35,6 +35,7 @@ import { ChevronUp, User2 } from "lucide-react";
 import { CreateNewProjectForm } from "./create-project-form";
 import { Project } from "./nav-projects";
 import { getProjects } from "@/services/projectService";
+import { SearchIdeas } from "./search-ideas";
 
 const items = [
   {
@@ -54,7 +55,7 @@ const items = [
   },
   {
     title: "Search",
-    url: "#",
+    component: SearchIdeas,
     icon: Search,
   },
 ];
@@ -99,10 +100,14 @@ export function AppSidebar() {
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild tooltip={item.title}>
-                    <a href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </a>
+                    {item.component ? (
+                      <item.component />
+                    ) : (
+                      <a href={item.url}>
+                        <item.icon />
+                        <span>{item.title}</span>
+                      </a>
+                    )}
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}

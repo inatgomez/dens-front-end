@@ -104,3 +104,25 @@ export async function deleteIdea(unique_id: string) {
     throw error;
   }
 }
+
+export async function searchIdeas(query: string, category?: string) {
+  const params = new URLSearchParams({
+    q: query,
+    ...(category && { category }),
+  });
+  try {
+    const response = await fetch(
+      `http://localhost:8000/ideasrecording/ideas/search?${params.toString()}`
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to search ideas.");
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error searching ideas:", error);
+    throw error;
+  }
+}
