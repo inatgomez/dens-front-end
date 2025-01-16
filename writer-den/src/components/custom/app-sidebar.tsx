@@ -43,16 +43,16 @@ const items = [
     url: "/",
     icon: SquarePen,
   },
-  {
-    title: "Get connections",
-    url: "#",
-    icon: Webhook,
-  },
-  {
-    title: "Recommendations",
-    url: "#",
-    icon: BotMessageSquare,
-  },
+  //  {
+  //    title: "Get connections",
+  //    url: "#",
+  //    icon: Webhook,
+  //  },
+  // {
+  //   title: "Recommendations",
+  //   url: "#",
+  //   icon: BotMessageSquare,
+  // },
   {
     title: "Search",
     component: SearchIdeas,

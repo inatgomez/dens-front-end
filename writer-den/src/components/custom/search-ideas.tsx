@@ -83,10 +83,19 @@ export function SearchIdeas() {
     }
   };
 
+  const processHighlightedContent = (content: string) => {
+    return content
+      .replace(
+        /<mark>/g,
+        '<span class="bg-primary text-primary-foreground px-1 py-0.5 rounded">'
+      )
+      .replace(/<\/mark>/g, "</span>");
+  };
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <button className='flex items-center gap-2'>
+        <button className='flex mx-2 items-center gap-2'>
           <Search className='h-4 w-4' />
           <span>Search</span>
         </button>
@@ -116,7 +125,7 @@ export function SearchIdeas() {
           </Select>
         </div>
 
-        <ScrollArea className='h-[400px] w-full rounded-md border p-4'>
+        <ScrollArea className='h-[400px] w-full p-2'>
           {isSearching ? (
             <div className='text-center text-muted-foreground'>
               Searching...
@@ -130,9 +139,14 @@ export function SearchIdeas() {
                   onClick={() => setOpen(false)}
                   className='block p-4 border rounded-lg hover:bg-accent cursor-pointer'
                 >
-                  <div className='text-sm text-muted-foreground mt-1'>
-                    {result.highlighted_content}
-                  </div>
+                  <div
+                    className='text-sm text-muted-foreground mt-1'
+                    dangerouslySetInnerHTML={{
+                      __html: processHighlightedContent(
+                        result.highlighted_content
+                      ),
+                    }}
+                  />
                   <div className='flex gap-2 mt-2 text-xs text-muted-foreground'>
                     <span className='bg-secondary px-2 py-1 rounded'>
                       {result.category}
