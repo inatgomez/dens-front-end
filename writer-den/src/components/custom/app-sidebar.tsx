@@ -138,7 +138,7 @@ export function AppSidebar() {
           <SidebarMenuItem>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <SidebarMenuButton>
+                <SidebarMenuButton tooltip='Account'>
                   <User2 /> Username
                   <ChevronUp className='ml-auto' />
                 </SidebarMenuButton>
