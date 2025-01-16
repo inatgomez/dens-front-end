@@ -1,5 +1,4 @@
 import * as React from "react";
-import { useRouter } from "next/navigation";
 import { debounce } from "lodash";
 import {
   Dialog,
@@ -19,6 +18,7 @@ import {
 import { searchIdeas } from "@/services/ideaService";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Search } from "lucide-react";
+import Link from "next/link";
 
 interface SearchResult {
   unique_id: string;
@@ -45,7 +45,6 @@ export function SearchIdeas() {
   const [searchResults, setSearchResults] = React.useState<SearchResult[]>([]);
   const [selectedCategory, setSelectedCategory] = React.useState<string>("");
   const [isSearching, setIsSearching] = React.useState(false);
-  const router = useRouter();
 
   const debouncedSearch = React.useCallback(
     debounce(async (query: string, category?: string) => {
@@ -82,11 +81,6 @@ export function SearchIdeas() {
       setIsSearching(true);
       debouncedSearch(searchInput.value, value);
     }
-  };
-
-  const handleIdeaClick = (projectId: string) => {
-    setOpen(false);
-    router.push(`/projects/${projectId}`);
   };
 
   return (
@@ -131,10 +125,11 @@ export function SearchIdeas() {
           ) : searchResults.length > 0 ? (
             <div className='space-y-4'>
               {searchResults.map((result) => (
-                <div
+                <Link
                   key={result.unique_id}
-                  className='p-4 border rounded-lg hover:bg-accent cursor-pointer'
-                  onClick={() => handleIdeaClick(result.project.unique_id)}
+                  href={`/projects/${result.project.unique_id}`}
+                  onClick={() => setOpen(false)}
+                  className='block p-4 border rounded-lg hover:bg-accent cursor-pointer'
                 >
                   <div className='text-sm text-muted-foreground mt-1'>
                     {result.matchingFragment}
@@ -147,7 +142,7 @@ export function SearchIdeas() {
                       {result.project.title}
                     </span>
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
           ) : (
