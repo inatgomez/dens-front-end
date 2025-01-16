@@ -180,7 +180,7 @@ const EditProjectForm: React.FC<EditProjectFormProps> = ({
                       <SelectContent>
                         {GENRES.map((genre) => (
                           <SelectItem key={genre} value={genre}>
-                            {genre}
+                            {genre.toLowerCase()}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -210,7 +210,7 @@ const EditProjectForm: React.FC<EditProjectFormProps> = ({
                       <SelectContent>
                         {GENRES.map((genre) => (
                           <SelectItem key={genre} value={genre}>
-                            {genre}
+                            {genre.toLowerCase()}
                           </SelectItem>
                         ))}
                       </SelectContent>

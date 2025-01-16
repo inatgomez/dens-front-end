@@ -156,7 +156,7 @@ const CreateNewProjectForm: React.FC<CreateNewProjectFormProps> = ({
                       <SelectContent>
                         {GENRES.map((genre) => (
                           <SelectItem key={genre} value={genre}>
-                            {genre}
+                            {genre.toLowerCase()}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -186,7 +186,7 @@ const CreateNewProjectForm: React.FC<CreateNewProjectFormProps> = ({
                       <SelectContent>
                         {GENRES.map((genre) => (
                           <SelectItem key={genre} value={genre}>
-                            {genre}
+                            {genre.toLowerCase()}
                           </SelectItem>
                         ))}
                       </SelectContent>
