@@ -31,7 +31,7 @@ interface SearchResult {
   matchingFragment: string;
 }
 
-const CATEGORIES = [
+const CATEGORY_OPTIONS = [
   "PLOT",
   "CHARACTER",
   "THEME",
@@ -107,9 +107,8 @@ export function SearchIdeas() {
               <SelectValue placeholder='Category Optional' />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value=''>All Categories</SelectItem>
-              {CATEGORIES.map((category) => (
-                <SelectItem key={category} value={category.toLowerCase()}>
+              {CATEGORY_OPTIONS.map((category) => (
+                <SelectItem key={category} value={category}>
                   {category}
                 </SelectItem>
               ))}
