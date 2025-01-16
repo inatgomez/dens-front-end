@@ -22,13 +22,13 @@ import Link from "next/link";
 
 interface SearchResult {
   unique_id: string;
-  content: string;
+  preview_content: string;
   category: string;
-  project: {
-    unique_id: string;
-    title: string;
-  };
-  matchingFragment: string;
+  project_name: string;
+  project_id: string;
+  highlighted_content: string;
+  rank: number;
+  created_at: string;
 }
 
 const CATEGORY_OPTIONS = [
@@ -126,19 +126,19 @@ export function SearchIdeas() {
               {searchResults.map((result) => (
                 <Link
                   key={result.unique_id}
-                  href={`/projects/${result.project.unique_id}`}
+                  href={`/projects/${result.project_id}`}
                   onClick={() => setOpen(false)}
                   className='block p-4 border rounded-lg hover:bg-accent cursor-pointer'
                 >
                   <div className='text-sm text-muted-foreground mt-1'>
-                    {result.matchingFragment}
+                    {result.highlighted_content}
                   </div>
                   <div className='flex gap-2 mt-2 text-xs text-muted-foreground'>
                     <span className='bg-secondary px-2 py-1 rounded'>
                       {result.category}
                     </span>
                     <span className='bg-secondary px-2 py-1 rounded'>
-                      {result.project.title}
+                      {result.project_name}
                     </span>
                   </div>
                 </Link>
