@@ -116,10 +116,6 @@ export function AppSidebar() {
         </SidebarGroup>
         <SidebarSeparator />
         <SidebarGroup>
-          <SidebarGroupLabel>Favorites</SidebarGroupLabel>
-        </SidebarGroup>
-        <SidebarSeparator />
-        <SidebarGroup>
           <SidebarGroupLabel>Projects</SidebarGroupLabel>
           <CreateNewProjectForm onAddProject={handleAddProject}>
             <SidebarGroupAction title='New Project'>
