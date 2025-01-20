@@ -303,7 +303,8 @@ function IdeasList({ projectId }: IdeasListProps) {
                 <SelectContent>
                   {CATEGORY_OPTIONS.map((category) => (
                     <SelectItem key={category} value={category}>
-                      {category}
+                      {category.charAt(0).toUpperCase() +
+                        category.slice(1).toLowerCase()}
                     </SelectItem>
                   ))}
                 </SelectContent>

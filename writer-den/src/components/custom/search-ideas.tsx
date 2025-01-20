@@ -119,7 +119,8 @@ export function SearchIdeas() {
             <SelectContent>
               {CATEGORY_OPTIONS.map((category) => (
                 <SelectItem key={category} value={category}>
-                  {category}
+                  {category.charAt(0).toUpperCase() +
+                    category.slice(1).toLowerCase()}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -150,7 +151,8 @@ export function SearchIdeas() {
                   />
                   <div className='flex gap-2 mt-2 text-xs text-muted-foreground'>
                     <span className='bg-secondary px-2 py-1 rounded'>
-                      {result.category}
+                      {result.category.charAt(0).toUpperCase() +
+                        result.category.slice(1).toLocaleLowerCase()}
                     </span>
                     <span className='bg-secondary px-2 py-1 rounded'>
                       {result.project_name}
