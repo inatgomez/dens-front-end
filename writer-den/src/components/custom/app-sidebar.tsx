@@ -40,7 +40,7 @@ import { SearchIdeas } from "./search-ideas";
 const items = [
   {
     title: "New idea",
-    url: "/",
+    url: "/dashboard",
     icon: SquarePen,
   },
   //  {
