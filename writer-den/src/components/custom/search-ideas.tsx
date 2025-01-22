@@ -20,6 +20,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Search } from "lucide-react";
 import Link from "next/link";
 import { SidebarMenuButton } from "../ui/sidebar";
+import DOMPurify from "dompurify";
 
 interface SearchResult {
   unique_id: string;
@@ -85,7 +86,8 @@ export function SearchIdeas() {
   };
 
   const processHighlightedContent = (content: string) => {
-    return content
+    const sanitizedContent = DOMPurify.sanitize(content);
+    return sanitizedContent
       .replace(
         /<mark>/g,
         '<span class="bg-primary text-primary-foreground px-1 py-0.5 rounded">'
