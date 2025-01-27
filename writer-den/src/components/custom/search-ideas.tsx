@@ -19,7 +19,7 @@ import { searchIdeas } from "@/services/ideaService";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Search } from "lucide-react";
 import Link from "next/link";
-import { SidebarMenuButton } from "../ui/sidebar";
+import { SidebarMenuButton } from "@/components/ui/sidebar";
 import DOMPurify from "dompurify";
 
 interface SearchResult {
