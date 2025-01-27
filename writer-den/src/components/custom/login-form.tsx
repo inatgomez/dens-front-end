@@ -1,5 +1,4 @@
-import { useUser } from "@auth0/nextjs-auth0/client";
-import { useRouter } from "next/router";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -8,55 +7,22 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
-  const { user, isLoading } = useUser();
-  const router = useRouter();
-
-  if (isLoading) return null;
-  if (user) {
-    router.push("/dashboard");
-    return null;
-  }
-
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <Card className='bg-slate-800'>
+      <Card>
         <CardHeader>
-          <CardTitle className='text-2xl'>Welcome to Writer's Den</CardTitle>
-          <CardDescription className='text-slate-200'>
-            Sign in to start writing your next story
-          </CardDescription>
+          <CardTitle className='text-2xl'>Login to Writer's Den</CardTitle>
+          <CardDescription>Login using your Google Account</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className='flex flex-col gap-6'>
-            <Button
-              variant='default'
-              className='w-full'
-              onClick={() => router.push("/api/auth/login")}
-            >
-              <svg
-                className='mr-2 h-4 w-4'
-                aria-hidden='true'
-                focusable='false'
-                data-prefix='fab'
-                data-icon='google'
-                role='img'
-                xmlns='http://www.w3.org/2000/svg'
-                viewBox='0 0 488 512'
-              >
-                <path
-                  fill='currentColor'
-                  d='M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z'
-                ></path>
-              </svg>
-              Continue with Google
-            </Button>
-          </div>
+          <Button variant='default' className='w-full'>
+            Login with Google
+          </Button>
         </CardContent>
       </Card>
     </div>
