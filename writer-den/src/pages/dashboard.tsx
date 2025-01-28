@@ -6,7 +6,7 @@ export default function DashboardPage() {
   return (
     <>
       <Head>
-        <title>Writer's Den | Home</title>
+        <title>Writer&apos;s Den | Home</title>
         <meta name='description' content="Welcome to the Writer's Den!" />
       </Head>
       <Layout>

@@ -5,7 +5,7 @@ export default function HomePage() {
   return (
     <>
       <Head>
-        <title>Writer's Den | Login Page</title>
+        <title>Writer&apos;s Den | Login Page</title>
         <meta name='description' content="Writer's Den Login Page" />
       </Head>
       <div className='flex min-h-svh w-full items-center justify-center p-6 md:p-10'>

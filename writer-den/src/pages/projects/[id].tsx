@@ -40,7 +40,7 @@ export default function ProjectPage() {
   return (
     <>
       <Head>
-        <title>Writer's Den | Project</title>
+        <title>Writer&apos;s Den | Project</title>
         <meta name='description' content='Project content' />
       </Head>
       <Layout>
