@@ -36,6 +36,7 @@ import { CreateNewProjectForm } from "./create-project-form";
 import { Project } from "./nav-projects";
 import { getProjects } from "@/services/projectService";
 import { SearchIdeas } from "./search-ideas";
+import { useRetrieveUserQuery } from "@/redux/features/authApiSlice";
 
 const items = [
   {
@@ -62,6 +63,18 @@ const items = [
 
 export function AppSidebar() {
   const [projects, setProjects] = React.useState<Project[]>([]);
+
+  const { data: user, isLoading, isFetching } = useRetrieveUserQuery();
+
+  const userName = `${user?.first_name} + ' ' + ${user?.first_name}`;
+
+  if (isLoading || isFetching) {
+    return (
+      <div className='flex justify-center my-8'>
+        <span>Loading user details</span>
+      </div>
+    );
+  }
 
   React.useEffect(() => {
     async function fetchProjects() {
@@ -139,7 +152,7 @@ export function AppSidebar() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton tooltip='Account'>
-                  <User2 /> Username
+                  <User2 /> {userName}
                   <ChevronUp className='ml-auto' />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
@@ -147,12 +160,6 @@ export function AppSidebar() {
                 side='top'
                 className='w-[--radix-popper-anchor-width]'
               >
-                <DropdownMenuItem>
-                  <span>Account</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <span>Settings</span>
-                </DropdownMenuItem>
                 <DropdownMenuItem>
                   <span>Sign out</span>
                 </DropdownMenuItem>
