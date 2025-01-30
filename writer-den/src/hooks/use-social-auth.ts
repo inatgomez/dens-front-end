@@ -1,22 +1,20 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import { useAppDispatch } from "@/redux/hooks";
 import { setAuth } from "@/redux/features/authSlice";
 import { useToast } from "@/hooks/use-toast";
 
-export default function useSocialAuth(
-  authenticate: any,
-  code: string,
-  state: string
-) {
+export default function useSocialAuth(authenticate: any) {
   const { toast } = useToast();
   const dispatch = useAppDispatch();
   const router = useRouter();
 
+  const effectRan = useRef(false);
+
   useEffect(() => {
     const { state, code } = router.query;
 
-    if (state && code) {
+    if (state && code && !effectRan.current) {
       authenticate({ state, code })
         .unwrap()
         .then(() => {
@@ -30,8 +28,12 @@ export default function useSocialAuth(
           toast({
             description: "Failed to log in",
           });
-          router.push("/auth/google");
+          router.push("/");
         });
     }
+
+    return () => {
+      effectRan.current = true;
+    };
   }, [authenticate, router, dispatch, toast]);
 }

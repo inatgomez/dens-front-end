@@ -6,7 +6,7 @@ async function continueWithSocialAuth(provider: string, redirect: string) {
   try {
     const url = `${
       process.env.NEXT_PUBLIC_HOST
-    }/api/o/${provider}/redirect_uri=${
+    }/api/o/${provider}/?redirect_uri=${
       process.env.NODE_ENV === "production"
         ? process.env.NEXT_PUBLIC_REDIRECT_URL
         : "http://127.0.0.1:8000"
