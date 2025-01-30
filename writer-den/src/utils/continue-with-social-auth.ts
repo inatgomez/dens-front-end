@@ -1,9 +1,6 @@
 import { useToast } from "@/hooks/use-toast";
 
-export default async function continueWithSocialAuth(
-  provider: string,
-  redirect: string
-) {
+async function continueWithSocialAuth(provider: string, redirect: string) {
   const { toast } = useToast();
 
   try {
@@ -40,3 +37,6 @@ export default async function continueWithSocialAuth(
     });
   }
 }
+
+export const continueWithGoogle = () =>
+  continueWithSocialAuth("google-oauth2", "google");
