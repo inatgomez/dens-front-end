@@ -4,6 +4,7 @@ import Head from "next/head";
 
 import Layout from "@/components/custom/layout";
 import IdeasList from "@/components/custom/list-ideas";
+import RequireAuth from "@/components/utils/RequireAuth";
 
 interface Project {
   unique_id: string;
@@ -38,7 +39,7 @@ export default function ProjectPage() {
     return <p className='text-base text-neutral-98'>Project not found</p>;
 
   return (
-    <>
+    <RequireAuth>
       <Head>
         <title>Writer&apos;s Den | Project</title>
         <meta name='description' content='Project content' />
@@ -52,6 +53,6 @@ export default function ProjectPage() {
           <IdeasList projectId={id as string} />
         </div>
       </Layout>
-    </>
+    </RequireAuth>
   );
 }
