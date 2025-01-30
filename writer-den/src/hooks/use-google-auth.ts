@@ -10,7 +10,7 @@ export function useGoogleAuth() {
       }/api/o/${provider}/?redirect_uri=${
         process.env.NODE_ENV === "production"
           ? process.env.NEXT_PUBLIC_REDIRECT_URL
-          : "http://127.0.0.1:8000"
+          : "http://localhost:3000"
       }/auth/${redirect}`;
 
       const response = await fetch(url, {
