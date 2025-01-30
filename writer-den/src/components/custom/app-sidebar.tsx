@@ -66,23 +66,11 @@ const items = [
 
 export function AppSidebar() {
   const [projects, setProjects] = React.useState<Project[]>([]);
-
   const router = useRouter();
 
   const { data: user, isLoading, isFetching } = useRetrieveUserQuery();
 
-  const userName = `${user?.first_name} + ' ' + ${user?.first_name}`;
-
-  if (isLoading || isFetching) {
-    return (
-      <div className='flex justify-center my-8'>
-        <span>Loading user details</span>
-      </div>
-    );
-  }
-
   const dispatch = useAppDispatch();
-
   const [logout] = useLogoutMutation();
 
   const handleLogout = () => {
@@ -122,6 +110,17 @@ export function AppSidebar() {
       prev.filter((project) => project.unique_id !== projectId)
     );
   };
+
+  const userName = user ? `${user?.first_name} ${user?.first_name}` : "User";
+
+  if (isLoading || isFetching) {
+    return (
+      <div className='flex justify-center my-8'>
+        <span>Loading user details...</span>
+      </div>
+    );
+  }
+
   return (
     <Sidebar variant='inset' collapsible='icon'>
       <SidebarContent>
@@ -170,7 +169,8 @@ export function AppSidebar() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton tooltip='Account'>
-                  <User2 /> {userName}
+                  <User2 />
+                  <span className='ml-2'>{userName}</span>
                   <ChevronUp className='ml-auto' />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
