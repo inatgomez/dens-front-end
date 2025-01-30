@@ -7,12 +7,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { continueWithGoogle } from "@/utils/continue-with-social-auth";
+import { useGoogleAuth } from "@/hooks/use-google-auth";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
+  const { continueWithGoogle } = useGoogleAuth();
+
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
