@@ -1,5 +1,5 @@
 import * as React from "react";
-
+import { useRouter } from "next/router";
 import {
   SquarePen,
   Webhook,
@@ -37,6 +37,9 @@ import { Project } from "./nav-projects";
 import { getProjects } from "@/services/projectService";
 import { SearchIdeas } from "./search-ideas";
 import { useRetrieveUserQuery } from "@/redux/features/authApiSlice";
+import { useAppDispatch } from "@/redux/hooks";
+import { useLogoutMutation } from "@/redux/features/authApiSlice";
+import { logout as setLogout } from "@/redux/features/authSlice";
 
 const items = [
   {
@@ -64,6 +67,8 @@ const items = [
 export function AppSidebar() {
   const [projects, setProjects] = React.useState<Project[]>([]);
 
+  const router = useRouter();
+
   const { data: user, isLoading, isFetching } = useRetrieveUserQuery();
 
   const userName = `${user?.first_name} + ' ' + ${user?.first_name}`;
@@ -75,6 +80,19 @@ export function AppSidebar() {
       </div>
     );
   }
+
+  const dispatch = useAppDispatch();
+
+  const [logout] = useLogoutMutation();
+
+  const handleLogout = () => {
+    logout(undefined)
+      .unwrap()
+      .then(() => {
+        dispatch(setLogout());
+        router.push("/");
+      });
+  };
 
   React.useEffect(() => {
     async function fetchProjects() {
@@ -160,7 +178,7 @@ export function AppSidebar() {
                 side='top'
                 className='w-[--radix-popper-anchor-width]'
               >
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={handleLogout}>
                   <span>Sign out</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
