@@ -14,17 +14,8 @@ export default function useSocialAuth(authenticate: any, provider: string) {
   useEffect(() => {
     const state = searchParams.get("state");
     const code = searchParams.get("code");
-    const error = searchParams.get("error");
-
-    if (error) {
-      toast({ description: "Authentication failed" });
-      router.push("/login");
-      return;
-    }
 
     if (state && code && !effectRan.current) {
-      console.log("Initiating social auth flow...");
-
       authenticate({ provider, state, code })
         .unwrap()
         .then(() => {
@@ -32,7 +23,6 @@ export default function useSocialAuth(authenticate: any, provider: string) {
           toast({
             description: "Logged in",
           });
-          console.log("Auth successful, redirecting...");
           router.push("/dashboard");
         })
         .catch(() => {
