@@ -6,7 +6,8 @@ interface User {
   email: string;
 }
 
-interface GoogleAuthArgs {
+interface SocialAuthArgs {
+  provider: string;
   state: string;
   code: string;
 }
@@ -21,9 +22,9 @@ const authApiSlice = apiSlice.injectEndpoints({
     retrieveUser: builder.query<User, void>({
       query: () => "/users/me/",
     }),
-    googleAuthenticate: builder.mutation<CreateUserResponse, GoogleAuthArgs>({
-      query: ({ state, code }) => ({
-        url: `/o/google-oauth2/?state=${encodeURIComponent(
+    socialAuthenticate: builder.mutation<CreateUserResponse, SocialAuthArgs>({
+      query: ({ provider, state, code }) => ({
+        url: `/o/${provider}/?state=${encodeURIComponent(
           state
         )}&code=${encodeURIComponent(code)}`,
         method: "POST",
@@ -64,7 +65,7 @@ const authApiSlice = apiSlice.injectEndpoints({
 
 export const {
   useRetrieveUserQuery,
-  useGoogleAuthenticateMutation,
+  useSocialAuthenticateMutation,
   useLoginMutation,
   useRegisterMutation,
   useVerifyMutation,

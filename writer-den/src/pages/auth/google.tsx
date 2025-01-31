@@ -1,10 +1,10 @@
-import { useGoogleAuthenticateMutation } from "@/redux/features/authApiSlice";
+import { useSocialAuthenticateMutation } from "@/redux/features/authApiSlice";
 import useSocialAuth from "@/hooks/use-social-auth";
 
 import { Card, CardContent } from "@/components/ui/card";
 
 export default function Google() {
-  const [googleAuthenticate] = useGoogleAuthenticateMutation();
+  const [googleAuthenticate] = useSocialAuthenticateMutation();
   useSocialAuth(googleAuthenticate, "google-oauth2");
 
   return (
