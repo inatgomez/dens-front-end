@@ -4,7 +4,7 @@ import { useAppDispatch } from "@/redux/hooks";
 import { setAuth } from "@/redux/features/authSlice";
 import { useToast } from "@/hooks/use-toast";
 
-export default function useSocialAuth(authenticate: any) {
+export default function useSocialAuth(authenticate: any, provider: string) {
   const { toast } = useToast();
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -15,7 +15,7 @@ export default function useSocialAuth(authenticate: any) {
     const { state, code } = router.query;
 
     if (state && code && !effectRan.current) {
-      authenticate({ state, code })
+      authenticate({ provider, state, code })
         .unwrap()
         .then(() => {
           dispatch(setAuth());
@@ -35,5 +35,5 @@ export default function useSocialAuth(authenticate: any) {
     return () => {
       effectRan.current = true;
     };
-  }, [authenticate, router, dispatch, toast]);
+  }, [authenticate, provider]);
 }
