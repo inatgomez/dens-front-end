@@ -12,7 +12,6 @@ export async function getIdeas(projectId: string) {
       ? data
       : [{ message: "You'll see your ideas soon!" }];
   } catch (error) {
-    console.error("Error fetching projects:", error);
     return [{ message: "Failed to load ideas. Please try again later" }];
   }
 }
@@ -44,7 +43,6 @@ export async function createIdea(
 
     return await response.json();
   } catch (error) {
-    console.error("Error creating idea:", error);
     throw error;
   }
 }
@@ -76,7 +74,6 @@ export async function editIdea(
 
     return await response.json();
   } catch (error) {
-    console.error("Error editing idea:", error);
     throw error;
   }
 }
@@ -100,7 +97,6 @@ export async function deleteIdea(unique_id: string) {
 
     return response;
   } catch (error) {
-    console.error("Error deleting idea:", error);
     throw error;
   }
 }
@@ -122,7 +118,6 @@ export async function searchIdeas(query: string, category?: string) {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("Error searching ideas:", error);
     throw error;
   }
 }

@@ -44,9 +44,7 @@ function NavProjects({
 
   const { toast } = useToast();
 
-  React.useEffect(() => {
-    console.log("State changed: editDialogOpen =", editDialogOpen);
-  }, [editDialogOpen]);
+  React.useEffect(() => {}, [editDialogOpen]);
 
   async function onClickDelete(unique_id: string) {
     try {
@@ -61,9 +59,7 @@ function NavProjects({
       toast({
         description: "Failed to delete project. Try again.",
       });
-      console.error("Failed to delete project:", error);
     }
-    console.log("Project id:", unique_id);
   }
 
   return (
@@ -88,13 +84,6 @@ function NavProjects({
             >
               <DropdownMenuItem
                 onClick={() => {
-                  console.log(
-                    "Dropdown item clicked, current state:",
-                    "editDialogOpen:",
-                    editDialogOpen,
-                    "project.unique_id:",
-                    project.unique_id
-                  );
                   setEditDialogOpen(project.unique_id);
                 }}
                 className='cursor-default focus:bg-slate-700 focus:text-slate-50 outline-none rounded-sm px-2 py-1.5 transition-colors'
@@ -113,7 +102,6 @@ function NavProjects({
             projectId={project.unique_id}
             isOpen={editDialogOpen === project.unique_id}
             onClose={() => {
-              console.log("Closing dialog, resetting editDialogOpen to null.");
               setEditDialogOpen(null);
             }}
             onUpdateProject={onUpdateProject}

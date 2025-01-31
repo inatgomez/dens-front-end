@@ -117,9 +117,7 @@ function IdeasList({ projectId }: IdeasListProps) {
       toast({
         description: "Failed to delete idea",
       });
-      console.error("Failed to delete idea:", error);
     }
-    console.log("Idea id:", unique_id);
   }
 
   const handleUpdateIdea = React.useCallback(

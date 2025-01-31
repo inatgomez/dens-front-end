@@ -91,9 +91,7 @@ const CreateNewProjectForm: React.FC<CreateNewProjectFormProps> = ({
       toast({
         description: "Failed to create project. Try again.",
       });
-      console.error("Failed to create project:", error);
     }
-    console.log("Submitted values:", values);
   }
 
   return (

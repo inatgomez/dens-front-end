@@ -8,9 +8,11 @@ export default function Google() {
   useSocialAuth(googleAuthenticate);
 
   return (
-    <div className='flex justify-center items-center gap-6'>
+    <div className='m-16 flex justify-center items-center'>
       <Card>
-        <CardContent>Loading page</CardContent>
+        <CardContent className='flex justify-center p-4'>
+          Loading page ...
+        </CardContent>
       </Card>
     </div>
   );

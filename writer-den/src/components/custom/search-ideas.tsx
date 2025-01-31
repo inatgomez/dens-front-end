@@ -60,7 +60,6 @@ export function SearchIdeas() {
         const results = await searchIdeas(query, category);
         setSearchResults(results);
       } catch (error) {
-        console.error("Search failed:", error);
         setSearchResults([]);
       } finally {
         setIsSearching(false);

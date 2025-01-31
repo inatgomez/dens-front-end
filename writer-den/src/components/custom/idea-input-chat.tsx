@@ -106,7 +106,6 @@ export const IdeaInputChat = React.forwardRef<HTMLDivElement, IdeaEditorProps>(
         toast({
           description: "Failed to save the idea. Try again.",
         });
-        console.error("Failed to save idea:", error);
       }
     };
 

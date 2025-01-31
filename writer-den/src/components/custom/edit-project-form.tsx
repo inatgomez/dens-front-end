@@ -84,7 +84,6 @@ const EditProjectForm: React.FC<EditProjectFormProps> = ({
   React.useEffect(() => {
     async function fetchProject() {
       if (!isOpen || !projectId) {
-        console.log("Early return - conditions not met");
         return;
       }
 
@@ -100,7 +99,6 @@ const EditProjectForm: React.FC<EditProjectFormProps> = ({
         toast({
           description: "Failed to load project details.",
         });
-        console.error("Fetch Project Error:", error);
       }
     }
 
@@ -115,7 +113,6 @@ const EditProjectForm: React.FC<EditProjectFormProps> = ({
         toast({
           description: "Success! Your project has been updated.",
         });
-        console.log("Form values o submit:", values);
         onUpdateProject(data);
         onClose();
       }
@@ -123,7 +120,6 @@ const EditProjectForm: React.FC<EditProjectFormProps> = ({
       toast({
         description: "Failed to update project. Try again.",
       });
-      console.error("Failed to update project:", error);
     }
   }
 
@@ -131,7 +127,6 @@ const EditProjectForm: React.FC<EditProjectFormProps> = ({
     <Dialog
       open={isOpen}
       onOpenChange={(state) => {
-        console.log("Dialog state changed to:", state);
         if (!state) onClose();
       }}
     >

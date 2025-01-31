@@ -12,7 +12,6 @@ export async function getProjects() {
       ? data
       : [{ message: "You'll see your projects soon!" }];
   } catch (error) {
-    console.error("Error fetching projects:", error);
     return [{ message: "Failed to load projects. Please try again later" }];
   }
 }
@@ -36,7 +35,6 @@ export async function getProject(unique_id: string) {
       }
     );
   } catch (error) {
-    console.error("Error fetching project:", error);
     return {
       name: "Untitled",
       main_genre: "",
@@ -70,7 +68,6 @@ export async function createProject(projectData: {
 
     return await response.json();
   } catch (error) {
-    console.error("Error creating project:", error);
     throw error;
   }
 }
@@ -102,7 +99,6 @@ export async function editProject(
 
     return await response.json();
   } catch (error) {
-    console.error("Error editing project:", error);
     throw error;
   }
 }
@@ -123,7 +119,6 @@ export async function deleteProject(unique_id: string) {
 
     return response;
   } catch (error) {
-    console.error("Error deleting the project:", error);
     throw error;
   }
 }
