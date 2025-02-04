@@ -1,7 +1,10 @@
 export async function getIdeas(projectId: string) {
   try {
     const response = await fetch(
-      `http://localhost:8000/api/notes/ideas/${projectId}/ideas`
+      `http://localhost:8000/api/notes/ideas/${projectId}/ideas`,
+      {
+        credentials: "include",
+      }
     );
     if (!response.ok) {
       throw new Error("Failed to fecth ideas.");
@@ -32,6 +35,7 @@ export async function createIdea(
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify(ideaData),
       }
     );
@@ -63,6 +67,7 @@ export async function editIdea(
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify(ideaData),
       }
     );
@@ -87,6 +92,7 @@ export async function deleteIdea(unique_id: string) {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
       }
     );
 
@@ -108,7 +114,10 @@ export async function searchIdeas(query: string, category?: string) {
   });
   try {
     const response = await fetch(
-      `http://localhost:8000/api/notes/ideas/search?${params.toString()}`
+      `http://localhost:8000/api/notes/ideas/search?${params.toString()}`,
+      {
+        credentials: "include",
+      }
     );
 
     if (!response.ok) {

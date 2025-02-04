@@ -1,6 +1,8 @@
 export async function getProjects() {
   try {
-    const response = await fetch("http://localhost:8000/api/notes/projects/");
+    const response = await fetch("http://localhost:8000/api/notes/projects/", {
+      credentials: "include",
+    });
     if (!response.ok) {
       throw new Error("Failed to fecth projects.");
     }
@@ -17,7 +19,10 @@ export async function getProjects() {
 export async function getProject(unique_id: string) {
   try {
     const response = await fetch(
-      `http://localhost:8000/api/notes/projects/${unique_id}`
+      `http://localhost:8000/api/notes/projects/${unique_id}`,
+      {
+        credentials: "include",
+      }
     );
     if (!response.ok) {
       throw new Error("Failed to fetch project.");
@@ -53,6 +58,7 @@ export async function createProject(projectData: {
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: "include",
       body: JSON.stringify(projectData),
     });
 
@@ -83,6 +89,7 @@ export async function editProject(
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify(projectData),
       }
     );
@@ -104,6 +111,7 @@ export async function deleteProject(unique_id: string) {
       `http://localhost:8000/api/notes/projects/${unique_id}`,
       {
         method: "DELETE",
+        credentials: "include",
       }
     );
 

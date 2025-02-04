@@ -23,7 +23,10 @@ export default function ProjectPage() {
     async function fetchProject() {
       if (id) {
         const response = await fetch(
-          `http://localhost:8000/api/notes/projects/${id}`
+          `http://localhost:8000/api/notes/projects/${id}`,
+          {
+            credentials: "include",
+          }
         );
         const data = await response.json();
         setProject(data);
