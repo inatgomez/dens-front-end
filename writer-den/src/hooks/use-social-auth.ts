@@ -38,5 +38,5 @@ export default function useSocialAuth(authenticate: any, provider: string) {
     // return () => {
     //   effectRan.current = true;
     // };
-  }, [authenticate, provider]);
+  }, [authenticate, provider, searchParams.toString()]);
 }
