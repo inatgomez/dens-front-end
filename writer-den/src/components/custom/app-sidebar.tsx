@@ -111,7 +111,7 @@ export function AppSidebar() {
     );
   };
 
-  const userName = user ? `${user?.first_name} ${user?.first_name}` : "User";
+  const userName = user ? `${user?.first_name}` : "User";
 
   if (isLoading || isFetching) {
     return (
