@@ -9,13 +9,15 @@ export default function useSocialAuth(authenticate: any, provider: string) {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const effectRan = useRef(false);
+
+  // const effectRan = useRef(false);
 
   useEffect(() => {
     const state = searchParams.get("state");
     const code = searchParams.get("code");
+    console.log("useSocialAuth hook:", { state, code });
 
-    if (state && code && !effectRan.current) {
+    if (state && code) {
       authenticate({ provider, state, code })
         .unwrap()
         .then(() => {
@@ -33,8 +35,8 @@ export default function useSocialAuth(authenticate: any, provider: string) {
         });
     }
 
-    return () => {
-      effectRan.current = true;
-    };
+    // return () => {
+    //   effectRan.current = true;
+    // };
   }, [authenticate, provider]);
 }
