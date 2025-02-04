@@ -128,7 +128,11 @@ const CreateNewProjectForm: React.FC<CreateNewProjectFormProps> = ({
                 <FormItem>
                   <FormLabel>Project's Name</FormLabel>
                   <FormControl>
-                    <Input placeholder='Name of your new project' {...field} />
+                    <Input
+                      className='text-sm text-slate-50'
+                      placeholder='Name of your new project'
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
