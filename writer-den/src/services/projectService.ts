@@ -1,8 +1,6 @@
 export async function getProjects() {
   try {
-    const response = await fetch(
-      "http://localhost:8000/ideasrecording/projects/"
-    );
+    const response = await fetch("http://localhost:8000/api/notes/projects/");
     if (!response.ok) {
       throw new Error("Failed to fecth projects.");
     }
@@ -19,7 +17,7 @@ export async function getProjects() {
 export async function getProject(unique_id: string) {
   try {
     const response = await fetch(
-      `http://localhost:8000/ideasrecording/projects/${unique_id}`
+      `http://localhost:8000/api/notes/projects/${unique_id}`
     );
     if (!response.ok) {
       throw new Error("Failed to fetch project.");
@@ -50,16 +48,13 @@ export async function createProject(projectData: {
   mix_genre?: string;
 }) {
   try {
-    const response = await fetch(
-      "http://localhost:8000/ideasrecording/projects/",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(projectData),
-      }
-    );
+    const response = await fetch("http://localhost:8000/api/notes/projects/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(projectData),
+    });
 
     if (!response.ok) {
       const errorData = await response.json();
@@ -82,7 +77,7 @@ export async function editProject(
 ) {
   try {
     const response = await fetch(
-      `http://localhost:8000/ideasrecording/projects/${unique_id}`,
+      `http://localhost:8000/api/notes/projects/${unique_id}`,
       {
         method: "PATCH",
         headers: {
@@ -106,7 +101,7 @@ export async function editProject(
 export async function deleteProject(unique_id: string) {
   try {
     const response = await fetch(
-      `http://localhost:8000/ideasrecording/projects/${unique_id}`,
+      `http://localhost:8000/api/notes/projects/${unique_id}`,
       {
         method: "DELETE",
       }
