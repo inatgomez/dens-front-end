@@ -29,7 +29,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { createProject } from "@/services/projectService";
+import { useCreateProjectMutation } from "@/redux/features/authApiSlice";
 import { Project } from "./nav-projects";
 
 interface CreateNewProjectFormProps {
@@ -70,6 +70,7 @@ const CreateNewProjectForm: React.FC<CreateNewProjectFormProps> = ({
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
 
   const { toast } = useToast();
+  const [createProject] = useCreateProjectMutation();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -82,7 +83,7 @@ const CreateNewProjectForm: React.FC<CreateNewProjectFormProps> = ({
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      const newProject = await createProject(values);
+      const newProject = await createProject(values).unwrap();
       toast({
         description: "Success! Your project has been created.",
       });
