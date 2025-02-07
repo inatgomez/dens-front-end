@@ -73,12 +73,6 @@ export function AppSidebar() {
       });
   };
 
-  const handleAddProject = (newProject: Project) => {};
-
-  const handleUpdateProject = (updatedProject: Project) => {};
-
-  const handleDeleteProject = (projectId: string) => {};
-
   const userName = user ? `${user?.first_name}` : "User";
 
   if (userLoading || userFetching || projectsLoading) {
@@ -115,18 +109,14 @@ export function AppSidebar() {
         <SidebarSeparator />
         <SidebarGroup>
           <SidebarGroupLabel>Projects</SidebarGroupLabel>
-          <CreateNewProjectForm onAddProject={handleAddProject}>
+          <CreateNewProjectForm>
             <SidebarGroupAction title='New Project'>
               <Plus /> <span className='sr-only'>New Project</span>
             </SidebarGroupAction>
           </CreateNewProjectForm>
           <SidebarGroupContent>
             <React.Suspense fallback={<NavProjectsSkeleton />}>
-              <NavProjects
-                projects={projects}
-                onUpdateProject={handleUpdateProject}
-                onDeleteProject={handleDeleteProject}
-              />
+              <NavProjects projects={projects} />
             </React.Suspense>
           </SidebarGroupContent>
         </SidebarGroup>

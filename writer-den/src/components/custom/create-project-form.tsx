@@ -34,7 +34,6 @@ import { Project } from "@/types/project";
 
 interface CreateNewProjectFormProps {
   children: React.ReactNode;
-  onAddProject: (newProject: Project) => void;
 }
 
 const GENRES = [
@@ -65,7 +64,6 @@ const formSchema = z.object({
 
 const CreateNewProjectForm: React.FC<CreateNewProjectFormProps> = ({
   children,
-  onAddProject,
 }) => {
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
 
@@ -83,11 +81,11 @@ const CreateNewProjectForm: React.FC<CreateNewProjectFormProps> = ({
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      const newProject = await createProject(values).unwrap();
+      await createProject(values).unwrap();
       toast({
         description: "Success! Your project has been created.",
       });
-      onAddProject(newProject);
+      setIsDialogOpen(false);
     } catch (error) {
       toast({
         description: "Failed to create project. Try again.",

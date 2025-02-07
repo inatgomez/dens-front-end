@@ -23,15 +23,9 @@ import { useDeleteProjectMutation } from "@/redux/features/projectApiSlice";
 
 interface NavProjectsProps {
   projects: Project[];
-  onUpdateProject: (updatedProject: Project) => void;
-  onDeleteProject: (projectId: string) => void;
 }
 
-function NavProjects({
-  projects,
-  onUpdateProject,
-  onDeleteProject,
-}: NavProjectsProps) {
+function NavProjects({ projects }: NavProjectsProps) {
   const [editDialogOpen, setEditDialogOpen] = React.useState<string | null>(
     null
   );
@@ -48,7 +42,6 @@ function NavProjects({
       toast({
         description: "Your project has been deleted.",
       });
-      onDeleteProject(unique_id);
     } catch (error) {
       toast({
         description: "Failed to delete project. Try again.",
@@ -98,7 +91,6 @@ function NavProjects({
             onClose={() => {
               setEditDialogOpen(null);
             }}
-            onUpdateProject={onUpdateProject}
           />
         </SidebarMenuItem>
       ))}

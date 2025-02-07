@@ -38,7 +38,6 @@ interface EditProjectFormProps {
   projectId: string;
   isOpen: boolean;
   onClose: () => void;
-  onUpdateProject: (updatedProject: Project) => void;
 }
 
 const GENRES = [
@@ -71,7 +70,6 @@ const EditProjectForm: React.FC<EditProjectFormProps> = ({
   projectId,
   isOpen,
   onClose,
-  onUpdateProject,
 }) => {
   const { toast } = useToast();
 
@@ -100,13 +98,11 @@ const EditProjectForm: React.FC<EditProjectFormProps> = ({
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      const updatedProject = await editProject({
+      await editProject({
         unique_id: projectId,
         projectData: values,
       }).unwrap();
-
       toast({ description: "Success! Your project has been updated." });
-      onUpdateProject(updatedProject);
       onClose();
     } catch (error) {
       toast({

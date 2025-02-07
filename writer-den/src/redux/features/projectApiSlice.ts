@@ -13,11 +13,21 @@ const projectApiSlice = apiSlice.injectEndpoints({
       query: () => ({
         url: "/notes/projects/",
       }),
+      providesTags: (result = [], error, arg) => [
+        ...result.map((project) => ({
+          type: "Project" as const,
+          id: project.unique_id,
+        })),
+        { type: "Project", id: "LIST" },
+      ],
     }),
     getProject: builder.query<Project, string>({
       query: (unique_id) => ({
         url: `/notes/projects/${unique_id}`,
       }),
+      providesTags: (result, error, unique_id) => [
+        { type: "Project", id: unique_id },
+      ],
     }),
     createProject: builder.mutation<Project, ProjectData>({
       query: (projectData) => ({
@@ -25,6 +35,7 @@ const projectApiSlice = apiSlice.injectEndpoints({
         method: "POST",
         body: projectData,
       }),
+      invalidatesTags: [{ type: "Project", id: "LIST" }],
     }),
     editProject: builder.mutation<
       Project,
@@ -35,12 +46,18 @@ const projectApiSlice = apiSlice.injectEndpoints({
         method: "PATCH",
         body: projectData,
       }),
+      invalidatesTags: (result, error, { unique_id }) => [
+        { type: "Project", id: unique_id },
+      ],
     }),
     deleteProject: builder.mutation<{ success: boolean }, string>({
       query: (unique_id) => ({
         url: `/notes/projects/${unique_id}`,
         method: "DELETE",
       }),
+      invalidatesTags: (result, error, unique_id) => [
+        { type: "Project", id: unique_id },
+      ],
     }),
   }),
 });
