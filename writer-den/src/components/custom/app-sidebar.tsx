@@ -1,12 +1,6 @@
 import * as React from "react";
 import { useRouter } from "next/router";
-import {
-  SquarePen,
-  Webhook,
-  BotMessageSquare,
-  Search,
-  Plus,
-} from "lucide-react";
+import { SquarePen, Search, Plus } from "lucide-react";
 
 import {
   Sidebar,
@@ -34,8 +28,9 @@ import { NavProjects, NavProjectsSkeleton } from "./nav-projects";
 import { ChevronUp, User2 } from "lucide-react";
 import { CreateNewProjectForm } from "./create-project-form";
 import { Project } from "@/types/project";
-import { getProjects } from "@/services/projectService";
 import { SearchIdeas } from "./search-ideas";
+
+import { useGetProjectsQuery } from "@/redux/features/projectApiSlice";
 import { useRetrieveUserQuery } from "@/redux/features/authApiSlice";
 import { useAppDispatch } from "@/redux/hooks";
 import { useLogoutMutation } from "@/redux/features/authApiSlice";
@@ -47,16 +42,6 @@ const items = [
     url: "/dashboard",
     icon: SquarePen,
   },
-  //  {
-  //    title: "Get connections",
-  //    url: "#",
-  //    icon: Webhook,
-  //  },
-  // {
-  //   title: "Recommendations",
-  //   url: "#",
-  //   icon: BotMessageSquare,
-  // },
   {
     title: "Search",
     component: SearchIdeas,
@@ -65,12 +50,18 @@ const items = [
 ];
 
 export function AppSidebar() {
-  const [projects, setProjects] = React.useState<Project[]>([]);
   const router = useRouter();
-
-  const { data: user, isLoading, isFetching } = useRetrieveUserQuery();
-
   const dispatch = useAppDispatch();
+
+  const { data: projects = [], isLoading: projectsLoading } =
+    useGetProjectsQuery();
+
+  const {
+    data: user,
+    isLoading: userLoading,
+    isFetching: userFetching,
+  } = useRetrieveUserQuery();
+
   const [logout] = useLogoutMutation();
 
   const handleLogout = () => {
@@ -82,38 +73,15 @@ export function AppSidebar() {
       });
   };
 
-  React.useEffect(() => {
-    async function fetchProjects() {
-      const data = await getProjects();
-      setProjects(data);
-    }
+  const handleAddProject = (newProject: Project) => {};
 
-    fetchProjects();
-  }, []);
+  const handleUpdateProject = (updatedProject: Project) => {};
 
-  const handleAddProject = (newProject: Project) => {
-    setProjects((prev) => [...prev, newProject]);
-  };
-
-  const handleUpdateProject = (updatedProject: Project) => {
-    setProjects((prev) =>
-      prev.map((project) =>
-        project.unique_id === updatedProject.unique_id
-          ? updatedProject
-          : project
-      )
-    );
-  };
-
-  const handleDeleteProject = (projectId: string) => {
-    setProjects((prev) =>
-      prev.filter((project) => project.unique_id !== projectId)
-    );
-  };
+  const handleDeleteProject = (projectId: string) => {};
 
   const userName = user ? `${user?.first_name}` : "User";
 
-  if (isLoading || isFetching) {
+  if (userLoading || userFetching || projectsLoading) {
     return (
       <div className='flex justify-center my-8'>
         <span>Loading user details...</span>

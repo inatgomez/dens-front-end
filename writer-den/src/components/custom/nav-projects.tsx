@@ -1,5 +1,4 @@
 import * as React from "react";
-import { getProjects } from "@/services/projectService";
 import Link from "next/link";
 import {
   SidebarMenu,
@@ -16,11 +15,11 @@ import {
   DropdownMenuTrigger,
 } from "@radix-ui/react-dropdown-menu";
 
-import { deleteProject } from "@/services/projectService";
 import { useToast } from "@/hooks/use-toast";
 
 import { EditProjectForm } from "./edit-project-form";
 import { Project } from "@/types/project";
+import { useDeleteProjectMutation } from "@/redux/features/projectApiSlice";
 
 interface NavProjectsProps {
   projects: Project[];
@@ -38,18 +37,18 @@ function NavProjects({
   );
 
   const { toast } = useToast();
+  const [deleteProject] = useDeleteProjectMutation();
 
   React.useEffect(() => {}, [editDialogOpen]);
 
   async function onClickDelete(unique_id: string) {
     try {
-      const response = await deleteProject(unique_id);
-      if (response.ok) {
-        toast({
-          description: "Your project has been deleted.",
-        });
-        onDeleteProject(unique_id);
-      }
+      await deleteProject(unique_id).unwrap();
+
+      toast({
+        description: "Your project has been deleted.",
+      });
+      onDeleteProject(unique_id);
     } catch (error) {
       toast({
         description: "Failed to delete project. Try again.",
