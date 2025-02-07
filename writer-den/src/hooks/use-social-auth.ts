@@ -15,7 +15,6 @@ export default function useSocialAuth(authenticate: any, provider: string) {
   useEffect(() => {
     const state = searchParams.get("state");
     const code = searchParams.get("code");
-    console.log("useSocialAuth hook:", { state, code });
 
     if (state && code) {
       authenticate({ provider, state, code })
