@@ -1,7 +1,30 @@
 import Head from "next/head";
 import { LoginForm } from "@/components/custom/login-form";
+import { Card, CardDescription, CardHeader } from "@/components/ui/card";
+
+import { useRouter } from "next/router";
+import { useAppSelector } from "@/redux/hooks";
 
 export default function HomePage() {
+  const { isLoading, isAuthenticated } = useAppSelector((state) => state.auth);
+  const router = useRouter();
+
+  if (isLoading) {
+    return (
+      <div className='flex flex-col gap-6'>
+        <Card>
+          <CardHeader>
+            <CardDescription>Loading sigin page...</CardDescription>
+          </CardHeader>
+        </Card>
+      </div>
+    );
+  }
+
+  if (isAuthenticated) {
+    router.push("/dashboard");
+  }
+
   return (
     <>
       <Head>
