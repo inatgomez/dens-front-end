@@ -18,8 +18,8 @@ import { MeasuredContainer } from "../minimal-tiptap/measured-container";
 import { Send } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
-import { createIdea } from "@/services/ideaService";
-import { getProjects } from "@/services/projectService";
+import { useGetProjectsQuery } from "@/redux/features/projectApiSlice";
+import { useCreateIdeaMutation } from "@/redux/features/ideaApiSlice";
 
 export interface IdeaEditorProps
   extends Omit<UseMinimalTiptapEditorProps, "onUpdate"> {
@@ -27,11 +27,6 @@ export interface IdeaEditorProps
   onChange?: (value: Content) => void;
   className?: string;
   editorContentClassName?: string;
-}
-
-interface Project {
-  name: string;
-  unique_id: string;
 }
 
 const CATEGORY_OPTIONS = [
@@ -51,7 +46,7 @@ export const IdeaInputChat = React.forwardRef<HTMLDivElement, IdeaEditorProps>(
       ...props,
     });
 
-    const [projects, setProjects] = React.useState<Project[]>([]);
+    const { data: projects = [] } = useGetProjectsQuery();
     const [selectedProject, setSelectedProject] = React.useState<string | null>(
       null
     );
@@ -61,13 +56,7 @@ export const IdeaInputChat = React.forwardRef<HTMLDivElement, IdeaEditorProps>(
 
     const { toast } = useToast();
 
-    React.useEffect(() => {
-      async function fetchProjects() {
-        const projectsData = await getProjects();
-        setProjects(projectsData);
-      }
-      fetchProjects();
-    }, []);
+    const [createIdea] = useCreateIdeaMutation();
 
     const handleSaveIdea = async () => {
       if (!editor) return;
@@ -92,13 +81,11 @@ export const IdeaInputChat = React.forwardRef<HTMLDivElement, IdeaEditorProps>(
       };
 
       try {
-        await createIdea(selectedProject, ideaData);
+        await createIdea({ projectId: selectedProject, ideaData }).unwrap();
 
         editor.commands.clearContent();
-
         setSelectedProject(null);
         setSelectedCategory(null);
-
         toast({
           description: "Success! Your idea was saved.",
         });

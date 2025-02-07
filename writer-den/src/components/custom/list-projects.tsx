@@ -1,30 +1,17 @@
-import React, { useState, useEffect } from "react";
-import { getProjects } from "@/services/projectService";
 import Link from "next/link";
-
-interface Project {
-  unique_id: string;
-  name: string;
-  main_genre: string;
-  mix_genre: string;
-  created_at: string;
-  message?: string;
-}
+import { useGetProjectsQuery } from "@/redux/features/projectApiSlice";
 
 export default function ProjectsList() {
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data: projects = [], isLoading: projectsLoading } =
+    useGetProjectsQuery();
 
-  useEffect(() => {
-    async function fetchProjects() {
-      const data = await getProjects();
-      setProjects(data);
-      setLoading(false);
-    }
-    fetchProjects();
-  }, []);
-
-  if (loading) return <p className='text-base text-neutral-98'>Loading...</p>;
+  if (projectsLoading) {
+    return (
+      <div className='flex justify-center my-8'>
+        <span>Loading projects...</span>
+      </div>
+    );
+  }
 
   return (
     <div className='bg-slate-800 min-h-screen'>
@@ -35,7 +22,7 @@ export default function ProjectsList() {
           {projects.map((project) => (
             <Link
               key={project.unique_id || project.message}
-              href={`/projects/${project.unique_id}`}
+              href={`/notes/projects/${project.unique_id}`}
               className='group'
             >
               <div className='max-h-40 max-w-sm overflow-hidden rounded-lg bg-violet-700 shadow-sm shadow-violet-900 p-4'>
@@ -44,13 +31,11 @@ export default function ProjectsList() {
                 </h2>
                 {project.main_genre && (
                   <p className='text-base text-slate-50'>
-                    {project.main_genre}, {project.mix_genre}
-                  </p>
-                )}
-                {project.created_at && (
-                  <p className='text-sm text-slate-50'>
-                    Created on:
-                    {new Date(project.created_at).toLocaleDateString()}
+                    {project.main_genre.charAt(0).toUpperCase() +
+                      project.main_genre.slice(1).toLowerCase()}
+                    ,{" "}
+                    {project.mix_genre.charAt(0).toUpperCase() +
+                      project.mix_genre.slice(1).toLowerCase()}
                   </p>
                 )}
               </div>

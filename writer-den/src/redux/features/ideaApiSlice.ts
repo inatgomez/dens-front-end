@@ -5,12 +5,25 @@ export interface Idea {
   title: string;
   content: string;
   category: string;
+  project: string;
 }
 
 export interface IdeaData {
   title?: string;
   content: string;
   category: string;
+  projectId?: string;
+}
+
+export interface SearchResult {
+  unique_id: string;
+  preview_content: string;
+  category: string;
+  project_name: string;
+  project_id: string;
+  highlighted_content: string;
+  rank: number;
+  created_at: string;
 }
 
 const ideaApiSlice = apiSlice.injectEndpoints({
@@ -46,7 +59,10 @@ const ideaApiSlice = apiSlice.injectEndpoints({
         method: "DELETE",
       }),
     }),
-    searchIdeas: builder.query<Idea[], { query: string; category?: string }>({
+    searchIdeas: builder.query<
+      SearchResult[],
+      { query: string; category?: string }
+    >({
       query: ({ query, category }) => {
         const params = new URLSearchParams({
           q: query,
@@ -64,4 +80,5 @@ export const {
   useEditIdeaMutation,
   useDeleteIdeaMutation,
   useSearchIdeasQuery,
+  useLazySearchIdeasQuery,
 } = ideaApiSlice;

@@ -1,5 +1,4 @@
-import * as React from "react";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 
 import {
   Collapsible,
@@ -27,13 +26,15 @@ import {
 } from "@/components/ui/dialog";
 
 import { useToast } from "@/hooks/use-toast";
-
 import { EditIdeaChat } from "./edit-idea-chat";
-
-import { getIdeas, deleteIdea, editIdea } from "@/services/ideaService";
-import { getProjects } from "@/services/projectService";
 import { Content } from "@tiptap/react";
-import { string } from "zod";
+
+import {
+  useGetIdeasQuery,
+  useDeleteIdeaMutation,
+  useEditIdeaMutation,
+} from "@/redux/features/ideaApiSlice";
+import { useGetProjectsQuery } from "@/redux/features/projectApiSlice";
 
 interface Idea {
   unique_id: string;
@@ -71,48 +72,27 @@ const stripHtmlTags = (html: string) => {
 };
 
 function IdeasList({ projectId }: IdeasListProps) {
-  const [ideas, setIdeas] = React.useState<Idea[]>([]);
-  const [projects, setProjects] = React.useState<Project[]>([]);
-  const [loading, setLoading] = React.useState(true);
-  const [showUnsavedChangesDialog, setShowUnsavedChangesDialog] =
-    React.useState(false);
-  const [ideaToCollapse, setIdeaToCollapse] = React.useState<string | null>(
-    null
-  );
-  const [collapsedStates, setCollapsedStates] = React.useState<{
-    [key: string]: boolean;
-  }>({});
-  const { toast } = useToast();
+  const { data: ideas = [], isLoading } = useGetIdeasQuery(projectId);
+  const { data: projects = [] } = useGetProjectsQuery();
+
+  const toast = useToast().toast;
+  const [deleteIdea] = useDeleteIdeaMutation();
+  const [editIdea] = useEditIdeaMutation();
+
   const [editedContent, setEditedContent] = useState<{ [key: string]: string }>(
     {}
   );
-
-  React.useEffect(() => {
-    async function fetchProjects() {
-      const projectsData = await getProjects();
-      setProjects(projectsData);
-    }
-    fetchProjects();
-  }, []);
-
-  React.useEffect(() => {
-    async function fetchIdeas() {
-      const data = await getIdeas(projectId);
-      setIdeas(data);
-      setLoading(false);
-    }
-    fetchIdeas();
-  }, [projectId]);
+  const [showUnsavedChangesDialog, setShowUnsavedChangesDialog] =
+    useState(false);
+  const [ideaToCollapse, setIdeaToCollapse] = useState<string | null>(null);
+  const [collapsedStates, setCollapsedStates] = useState<{
+    [key: string]: boolean;
+  }>({});
 
   async function handleDeleteIdea(unique_id: string) {
     try {
-      const response = await deleteIdea(unique_id);
-      if (response.ok) {
-        toast({
-          description: "Idea deleted successfully",
-        });
-        setIdeas((prev) => prev.filter((idea) => idea.unique_id !== unique_id));
-      }
+      await deleteIdea(unique_id).unwrap();
+      toast({ description: "Idea deleted successfully" });
     } catch (error) {
       toast({
         description: "Failed to delete idea",
@@ -120,7 +100,7 @@ function IdeasList({ projectId }: IdeasListProps) {
     }
   }
 
-  const handleUpdateIdea = React.useCallback(
+  const handleUpdateIdea = useCallback(
     async (
       idea: Idea,
       updates: {
@@ -130,27 +110,20 @@ function IdeasList({ projectId }: IdeasListProps) {
       }
     ) => {
       try {
-        const response = await editIdea(idea.unique_id, {
-          content: updates.content || idea.content,
-          category: updates.category || idea.category,
-          projectId: updates.projectId || idea.project,
-        });
-
-        if (response.ok) {
-          setIdeas((prev) =>
-            prev.map((i) =>
-              i.unique_id === idea.unique_id ? { ...i, ...updates } : i
-            )
-          );
-          toast({
-            description: "Idea updated successfully",
-          });
-        }
+        await editIdea({
+          unique_id: idea.unique_id,
+          ideaData: {
+            content: updates.content ?? idea.content,
+            category: updates.category ?? idea.category,
+            projectId: updates.projectId ?? idea.project,
+          },
+        }).unwrap();
+        toast({ description: "Idea updated successfully" });
       } catch (error) {
         toast({ description: "Failed to update idea" });
       }
     },
-    [toast]
+    [editIdea, toast]
   );
 
   const handleContentChange = (ideaId: string, content: Content) => {
@@ -165,27 +138,15 @@ function IdeasList({ projectId }: IdeasListProps) {
   const handleSaveIdea = async (idea: Idea) => {
     const newContent = editedContent[idea.unique_id];
     if (!newContent) return;
-
     try {
       const contentToSend = newContent.replace(/^"|"$/g, "");
-
       await handleUpdateIdea(idea, { content: contentToSend });
-
-      setIdeas((prev) =>
-        prev.map((i) =>
-          i.unique_id === idea.unique_id ? { ...idea, content: newContent } : i
-        )
-      );
-
       setEditedContent((prev) => {
         const updated = { ...prev };
         delete updated[idea.unique_id];
         return updated;
       });
-
-      toast({
-        description: "Idea updated successfully",
-      });
+      toast({ description: "Idea updated successfully" });
     } catch (error) {
       toast({ description: "Failed to update idea" });
     }
@@ -225,7 +186,7 @@ function IdeasList({ projectId }: IdeasListProps) {
     setIdeaToCollapse(null);
   };
 
-  if (loading) return <p className='text-base text-slate-50'>Loading...</p>;
+  if (isLoading) return <p className='text-base text-slate-50'>Loading...</p>;
 
   return (
     <>

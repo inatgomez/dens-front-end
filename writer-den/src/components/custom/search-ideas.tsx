@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { debounce } from "lodash";
 import {
   Dialog,
@@ -15,23 +15,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { searchIdeas } from "@/services/ideaService";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Search } from "lucide-react";
 import Link from "next/link";
 import { SidebarMenuButton } from "@/components/ui/sidebar";
 import DOMPurify from "dompurify";
 
-interface SearchResult {
-  unique_id: string;
-  preview_content: string;
-  category: string;
-  project_name: string;
-  project_id: string;
-  highlighted_content: string;
-  rank: number;
-  created_at: string;
-}
+import { useLazySearchIdeasQuery } from "@/redux/features/ideaApiSlice";
 
 const CATEGORY_OPTIONS = [
   "PLOT",
@@ -43,44 +33,38 @@ const CATEGORY_OPTIONS = [
 ];
 
 export function SearchIdeas() {
-  const [open, setOpen] = React.useState(false);
-  const [searchResults, setSearchResults] = React.useState<SearchResult[]>([]);
-  const [selectedCategory, setSelectedCategory] = React.useState<string>("");
-  const [isSearching, setIsSearching] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
 
-  const debouncedSearch = React.useCallback(
-    debounce(async (query: string, category?: string) => {
-      if (query.length < 2) {
-        setSearchResults([]);
-        setIsSearching(false);
-        return;
-      }
+  const [triggerSearch, { data: searchResults = [], isFetching }] =
+    useLazySearchIdeasQuery();
 
-      try {
-        const results = await searchIdeas(query, category);
-        setSearchResults(results);
-      } catch (error) {
-        setSearchResults([]);
-      } finally {
-        setIsSearching(false);
-      }
-    }, 300),
-    []
+  const debouncedSearch = useMemo(
+    () =>
+      debounce((query: string, category?: string) => {
+        if (query.length < 2) return;
+        triggerSearch({ query, category });
+      }, 300),
+    [triggerSearch]
   );
+
+  useEffect(() => {
+    return () => {
+      debouncedSearch.cancel();
+    };
+  }, [debouncedSearch]);
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const query = event.target.value;
-    setIsSearching(true);
+    setSearchQuery(query);
     debouncedSearch(query, selectedCategory);
   };
 
   const handleCategoryChange = (value: string) => {
     setSelectedCategory(value);
-    const searchInput =
-      document.querySelector<HTMLInputElement>("#search-input");
-    if (searchInput?.value) {
-      setIsSearching(true);
-      debouncedSearch(searchInput.value, value);
+    if (searchQuery.length >= 2) {
+      debouncedSearch(searchQuery, value);
     }
   };
 
@@ -129,11 +113,11 @@ export function SearchIdeas() {
         </div>
 
         <ScrollArea className='h-[400px] w-full p-2'>
-          {isSearching ? (
+          {isFetching ? (
             <div className='text-center text-muted-foreground'>
               Searching...
             </div>
-          ) : searchResults.length > 0 ? (
+          ) : searchResults && searchResults.length > 0 ? (
             <div className='space-y-4'>
               {searchResults.map((result) => (
                 <Link
