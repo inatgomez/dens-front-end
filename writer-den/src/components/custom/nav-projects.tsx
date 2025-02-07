@@ -20,12 +20,7 @@ import { deleteProject } from "@/services/projectService";
 import { useToast } from "@/hooks/use-toast";
 
 import { EditProjectForm } from "./edit-project-form";
-
-export interface Project {
-  unique_id: string;
-  name: string;
-  message?: string;
-}
+import { Project } from "@/types/project";
 
 interface NavProjectsProps {
   projects: Project[];

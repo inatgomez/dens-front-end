@@ -29,8 +29,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { useCreateProjectMutation } from "@/redux/features/authApiSlice";
-import { Project } from "./nav-projects";
+import { useCreateProjectMutation } from "@/redux/features/projectApiSlice";
+import { Project } from "@/types/project";
 
 interface CreateNewProjectFormProps {
   children: React.ReactNode;

@@ -33,7 +33,7 @@ import { NavProjects, NavProjectsSkeleton } from "./nav-projects";
 
 import { ChevronUp, User2 } from "lucide-react";
 import { CreateNewProjectForm } from "./create-project-form";
-import { Project } from "./nav-projects";
+import { Project } from "@/types/project";
 import { getProjects } from "@/services/projectService";
 import { SearchIdeas } from "./search-ideas";
 import { useRetrieveUserQuery } from "@/redux/features/authApiSlice";

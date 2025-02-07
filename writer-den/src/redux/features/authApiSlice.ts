@@ -60,16 +60,6 @@ const authApiSlice = apiSlice.injectEndpoints({
         method: "POST",
       }),
     }),
-    createProject: builder.mutation({
-      query: (projectData) => ({
-        url: "/notes/projects/",
-        method: "POST",
-        body: projectData,
-        headers: {
-          "Content-Tyepe": "application-json",
-        },
-      }),
-    }),
   }),
 });
 
@@ -80,5 +70,4 @@ export const {
   useRegisterMutation,
   useVerifyMutation,
   useLogoutMutation,
-  useCreateProjectMutation,
 } = authApiSlice;

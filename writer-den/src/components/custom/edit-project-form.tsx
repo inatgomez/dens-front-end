@@ -28,8 +28,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { getProject, editProject } from "@/services/projectService";
-import { Project } from "./nav-projects";
+import {
+  useGetProjectQuery,
+  useEditProjectMutation,
+} from "@/redux/features/projectApiSlice";
+import { Project } from "@/types/project";
 
 interface EditProjectFormProps {
   projectId: string;
@@ -81,41 +84,30 @@ const EditProjectForm: React.FC<EditProjectFormProps> = ({
     },
   });
 
+  const { data: project } = useGetProjectQuery(projectId, { skip: !isOpen });
+
+  const [editProject] = useEditProjectMutation();
+
   React.useEffect(() => {
-    async function fetchProject() {
-      if (!isOpen || !projectId) {
-        return;
-      }
-
-      try {
-        const project = await getProject(projectId);
-
-        form.reset({
-          name: project.name || "Untitled",
-          main_genre: project.main_genre || "",
-          mix_genre: project.mix_genre || "",
-        });
-      } catch (error) {
-        toast({
-          description: "Failed to load project details.",
-        });
-      }
+    if (project) {
+      form.reset({
+        name: project.name || "Untitled",
+        main_genre: project.main_genre || "",
+        mix_genre: project.mix_genre || "",
+      });
     }
-
-    fetchProject();
-  }, [isOpen, projectId, form, toast]);
+  }, [project, form]);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      const data = await editProject(projectId, values);
+      const updatedProject = await editProject({
+        unique_id: projectId,
+        projectData: values,
+      }).unwrap();
 
-      if (data) {
-        toast({
-          description: "Success! Your project has been updated.",
-        });
-        onUpdateProject(data);
-        onClose();
-      }
+      toast({ description: "Success! Your project has been updated." });
+      onUpdateProject(updatedProject);
+      onClose();
     } catch (error) {
       toast({
         description: "Failed to update project. Try again.",
