@@ -1,5 +1,4 @@
 import * as React from "react";
-import { getProjects } from "@/services/projectService";
 import Link from "next/link";
 import {
   SidebarMenu,
@@ -16,61 +15,45 @@ import {
   DropdownMenuTrigger,
 } from "@radix-ui/react-dropdown-menu";
 
-import { deleteProject } from "@/services/projectService";
 import { useToast } from "@/hooks/use-toast";
 
 import { EditProjectForm } from "./edit-project-form";
-
-export interface Project {
-  unique_id: string;
-  name: string;
-  message?: string;
-}
+import { Project } from "@/types/project";
+import { useDeleteProjectMutation } from "@/redux/features/projectApiSlice";
 
 interface NavProjectsProps {
   projects: Project[];
-  onUpdateProject: (updatedProject: Project) => void;
-  onDeleteProject: (projectId: string) => void;
 }
 
-function NavProjects({
-  projects,
-  onUpdateProject,
-  onDeleteProject,
-}: NavProjectsProps) {
+function NavProjects({ projects }: NavProjectsProps) {
   const [editDialogOpen, setEditDialogOpen] = React.useState<string | null>(
     null
   );
 
   const { toast } = useToast();
+  const [deleteProject] = useDeleteProjectMutation();
 
-  React.useEffect(() => {
-    console.log("State changed: editDialogOpen =", editDialogOpen);
-  }, [editDialogOpen]);
+  React.useEffect(() => {}, [editDialogOpen]);
 
   async function onClickDelete(unique_id: string) {
     try {
-      const response = await deleteProject(unique_id);
-      if (response.ok) {
-        toast({
-          description: "Your project has been deleted.",
-        });
-        onDeleteProject(unique_id);
-      }
+      await deleteProject(unique_id).unwrap();
+
+      toast({
+        description: "Your project has been deleted.",
+      });
     } catch (error) {
       toast({
         description: "Failed to delete project. Try again.",
       });
-      console.error("Failed to delete project:", error);
     }
-    console.log("Project id:", unique_id);
   }
 
   return (
     <SidebarMenu>
       {projects.map((project) => (
         <SidebarMenuItem key={project.unique_id}>
-          <SidebarMenuButton asChild>
+          <SidebarMenuButton asChild tooltip={project.name || project.message}>
             <Link href={`/projects/${project.unique_id}`}>
               <FileText />
               <span>{project.name || project.message}</span>
@@ -88,13 +71,6 @@ function NavProjects({
             >
               <DropdownMenuItem
                 onClick={() => {
-                  console.log(
-                    "Dropdown item clicked, current state:",
-                    "editDialogOpen:",
-                    editDialogOpen,
-                    "project.unique_id:",
-                    project.unique_id
-                  );
                   setEditDialogOpen(project.unique_id);
                 }}
                 className='cursor-default focus:bg-slate-700 focus:text-slate-50 outline-none rounded-sm px-2 py-1.5 transition-colors'
@@ -113,10 +89,8 @@ function NavProjects({
             projectId={project.unique_id}
             isOpen={editDialogOpen === project.unique_id}
             onClose={() => {
-              console.log("Closing dialog, resetting editDialogOpen to null.");
               setEditDialogOpen(null);
             }}
-            onUpdateProject={onUpdateProject}
           />
         </SidebarMenuItem>
       ))}

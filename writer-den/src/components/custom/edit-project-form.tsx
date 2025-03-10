@@ -28,14 +28,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { getProject, editProject } from "@/services/projectService";
-import { Project } from "./nav-projects";
+import {
+  useGetProjectQuery,
+  useEditProjectMutation,
+} from "@/redux/features/projectApiSlice";
+import { Project } from "@/types/project";
 
 interface EditProjectFormProps {
   projectId: string;
   isOpen: boolean;
   onClose: () => void;
-  onUpdateProject: (updatedProject: Project) => void;
 }
 
 const GENRES = [
@@ -68,7 +70,6 @@ const EditProjectForm: React.FC<EditProjectFormProps> = ({
   projectId,
   isOpen,
   onClose,
-  onUpdateProject,
 }) => {
   const { toast } = useToast();
 
@@ -81,49 +82,32 @@ const EditProjectForm: React.FC<EditProjectFormProps> = ({
     },
   });
 
+  const { data: project } = useGetProjectQuery(projectId, { skip: !isOpen });
+
+  const [editProject] = useEditProjectMutation();
+
   React.useEffect(() => {
-    async function fetchProject() {
-      if (!isOpen || !projectId) {
-        console.log("Early return - conditions not met");
-        return;
-      }
-
-      try {
-        const project = await getProject(projectId);
-
-        form.reset({
-          name: project.name || "Untitled",
-          main_genre: project.main_genre || "",
-          mix_genre: project.mix_genre || "",
-        });
-      } catch (error) {
-        toast({
-          description: "Failed to load project details.",
-        });
-        console.error("Fetch Project Error:", error);
-      }
+    if (project) {
+      form.reset({
+        name: project.name || "Untitled",
+        main_genre: project.main_genre || "",
+        mix_genre: project.mix_genre || "",
+      });
     }
-
-    fetchProject();
-  }, [isOpen, projectId, form, toast]);
+  }, [project, form]);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      const data = await editProject(projectId, values);
-
-      if (data) {
-        toast({
-          description: "Success! Your project has been updated.",
-        });
-        console.log("Form values o submit:", values);
-        onUpdateProject(data);
-        onClose();
-      }
+      await editProject({
+        unique_id: projectId,
+        projectData: values,
+      }).unwrap();
+      toast({ description: "Success! Your project has been updated." });
+      onClose();
     } catch (error) {
       toast({
         description: "Failed to update project. Try again.",
       });
-      console.error("Failed to update project:", error);
     }
   }
 
@@ -131,7 +115,6 @@ const EditProjectForm: React.FC<EditProjectFormProps> = ({
     <Dialog
       open={isOpen}
       onOpenChange={(state) => {
-        console.log("Dialog state changed to:", state);
         if (!state) onClose();
       }}
     >
@@ -180,7 +163,8 @@ const EditProjectForm: React.FC<EditProjectFormProps> = ({
                       <SelectContent>
                         {GENRES.map((genre) => (
                           <SelectItem key={genre} value={genre}>
-                            {genre}
+                            {genre.charAt(0).toUpperCase() +
+                              genre.slice(1).toLowerCase()}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -210,7 +194,8 @@ const EditProjectForm: React.FC<EditProjectFormProps> = ({
                       <SelectContent>
                         {GENRES.map((genre) => (
                           <SelectItem key={genre} value={genre}>
-                            {genre}
+                            {genre.charAt(0).toUpperCase() +
+                              genre.slice(1).toLowerCase()}
                           </SelectItem>
                         ))}
                       </SelectContent>

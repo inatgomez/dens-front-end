@@ -1,13 +1,41 @@
-import Layout from "@/components/custom/layout";
-import IdeaInputChat from "@/components/custom/idea-input-chat";
+import Head from "next/head";
+import { LoginForm } from "@/components/custom/login-form";
+import { Card, CardDescription, CardHeader } from "@/components/ui/card";
 
-export default function App() {
-  return (
-    <Layout>
-      <div className='flex flex-col items-center justify-center h-full my-20'>
-        <h1 className='text-slate-50 text-3xl my-2'>What's your next idea?</h1>
-        <IdeaInputChat />
+import { useRouter } from "next/router";
+import { useAppSelector } from "@/redux/hooks";
+
+export default function HomePage() {
+  const { isLoading, isAuthenticated } = useAppSelector((state) => state.auth);
+  const router = useRouter();
+
+  if (isLoading) {
+    return (
+      <div className='flex flex-col gap-6'>
+        <Card>
+          <CardHeader>
+            <CardDescription>Loading sigin page...</CardDescription>
+          </CardHeader>
+        </Card>
       </div>
-    </Layout>
+    );
+  }
+
+  if (isAuthenticated) {
+    router.push("/dashboard");
+  }
+
+  return (
+    <>
+      <Head>
+        <title>Writer&apos;s Den | Login Page</title>
+        <meta name='description' content="Writer's Den Login Page" />
+      </Head>
+      <div className='flex min-h-svh w-full items-center justify-center p-6 md:p-10'>
+        <div className='w-full max-w-sm'>
+          <LoginForm />
+        </div>
+      </div>
+    </>
   );
 }

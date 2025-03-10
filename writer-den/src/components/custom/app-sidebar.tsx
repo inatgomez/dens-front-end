@@ -1,12 +1,6 @@
 import * as React from "react";
-
-import {
-  SquarePen,
-  Webhook,
-  BotMessageSquare,
-  Search,
-  Plus,
-} from "lucide-react";
+import { useRouter } from "next/router";
+import { SquarePen, Search, Plus } from "lucide-react";
 
 import {
   Sidebar,
@@ -33,63 +27,62 @@ import { NavProjects, NavProjectsSkeleton } from "./nav-projects";
 
 import { ChevronUp, User2 } from "lucide-react";
 import { CreateNewProjectForm } from "./create-project-form";
-import { Project } from "./nav-projects";
-import { getProjects } from "@/services/projectService";
+import { Project } from "@/types/project";
+import { SearchIdeas } from "./search-ideas";
+
+import { useGetProjectsQuery } from "@/redux/features/projectApiSlice";
+import { useRetrieveUserQuery } from "@/redux/features/authApiSlice";
+import { useAppDispatch } from "@/redux/hooks";
+import { useLogoutMutation } from "@/redux/features/authApiSlice";
+import { logout as setLogout } from "@/redux/features/authSlice";
 
 const items = [
   {
     title: "New idea",
-    url: "/",
+    url: "/dashboard",
     icon: SquarePen,
   },
   {
-    title: "Get connections",
-    url: "#",
-    icon: Webhook,
-  },
-  {
-    title: "Recommendations",
-    url: "#",
-    icon: BotMessageSquare,
-  },
-  {
     title: "Search",
-    url: "#",
+    component: SearchIdeas,
     icon: Search,
   },
 ];
 
 export function AppSidebar() {
-  const [projects, setProjects] = React.useState<Project[]>([]);
+  const router = useRouter();
+  const dispatch = useAppDispatch();
 
-  React.useEffect(() => {
-    async function fetchProjects() {
-      const data = await getProjects();
-      setProjects(data);
-    }
+  const { data: projects = [], isLoading: projectsLoading } =
+    useGetProjectsQuery();
 
-    fetchProjects();
-  }, []);
+  const {
+    data: user,
+    isLoading: userLoading,
+    isFetching: userFetching,
+  } = useRetrieveUserQuery();
 
-  const handleAddProject = (newProject: Project) => {
-    setProjects((prev) => [...prev, newProject]);
+  const [logout] = useLogoutMutation();
+
+  const handleLogout = () => {
+    logout(undefined)
+      .unwrap()
+      .then(() => {
+        dispatch(setLogout());
+        router.push("/");
+      });
   };
 
-  const handleUpdateProject = (updatedProject: Project) => {
-    setProjects((prev) =>
-      prev.map((project) =>
-        project.unique_id === updatedProject.unique_id
-          ? updatedProject
-          : project
-      )
+  const userName = user ? `${user?.first_name}` : "User";
+
+  if (userLoading || userFetching || projectsLoading) {
+    return (
+      <div className='flex justify-center my-8'>
+        <span>Loading user details...</span>
+      </div>
     );
-  };
+  }
 
-  const handleDeleteProject = (projectId: string) => {
-    setProjects((prev) =>
-      prev.filter((project) => project.unique_id !== projectId)
-    );
-  };
   return (
     <Sidebar variant='inset' collapsible='icon'>
       <SidebarContent>
@@ -99,10 +92,14 @@ export function AppSidebar() {
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild tooltip={item.title}>
-                    <a href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </a>
+                    {item.component ? (
+                      <item.component />
+                    ) : (
+                      <a href={item.url}>
+                        <item.icon />
+                        <span>{item.title}</span>
+                      </a>
+                    )}
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -111,23 +108,15 @@ export function AppSidebar() {
         </SidebarGroup>
         <SidebarSeparator />
         <SidebarGroup>
-          <SidebarGroupLabel>Favorites</SidebarGroupLabel>
-        </SidebarGroup>
-        <SidebarSeparator />
-        <SidebarGroup>
           <SidebarGroupLabel>Projects</SidebarGroupLabel>
-          <CreateNewProjectForm onAddProject={handleAddProject}>
+          <CreateNewProjectForm>
             <SidebarGroupAction title='New Project'>
               <Plus /> <span className='sr-only'>New Project</span>
             </SidebarGroupAction>
           </CreateNewProjectForm>
           <SidebarGroupContent>
             <React.Suspense fallback={<NavProjectsSkeleton />}>
-              <NavProjects
-                projects={projects}
-                onUpdateProject={handleUpdateProject}
-                onDeleteProject={handleDeleteProject}
-              />
+              <NavProjects projects={projects} />
             </React.Suspense>
           </SidebarGroupContent>
         </SidebarGroup>
@@ -137,8 +126,9 @@ export function AppSidebar() {
           <SidebarMenuItem>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <SidebarMenuButton>
-                  <User2 /> Username
+                <SidebarMenuButton tooltip='Account'>
+                  <User2 />
+                  <span className='ml-2'>{userName}</span>
                   <ChevronUp className='ml-auto' />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
@@ -146,13 +136,7 @@ export function AppSidebar() {
                 side='top'
                 className='w-[--radix-popper-anchor-width]'
               >
-                <DropdownMenuItem>
-                  <span>Account</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <span>Settings</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={handleLogout}>
                   <span>Sign out</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>

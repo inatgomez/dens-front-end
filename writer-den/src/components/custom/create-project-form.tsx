@@ -29,12 +29,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { createProject } from "@/services/projectService";
-import { Project } from "./nav-projects";
+import { useCreateProjectMutation } from "@/redux/features/projectApiSlice";
+import { Project } from "@/types/project";
 
 interface CreateNewProjectFormProps {
   children: React.ReactNode;
-  onAddProject: (newProject: Project) => void;
 }
 
 const GENRES = [
@@ -65,11 +64,11 @@ const formSchema = z.object({
 
 const CreateNewProjectForm: React.FC<CreateNewProjectFormProps> = ({
   children,
-  onAddProject,
 }) => {
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
 
   const { toast } = useToast();
+  const [createProject] = useCreateProjectMutation();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -82,18 +81,16 @@ const CreateNewProjectForm: React.FC<CreateNewProjectFormProps> = ({
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      const newProject = await createProject(values);
+      await createProject(values).unwrap();
       toast({
         description: "Success! Your project has been created.",
       });
-      onAddProject(newProject);
+      setIsDialogOpen(false);
     } catch (error) {
       toast({
         description: "Failed to create project. Try again.",
       });
-      console.error("Failed to create project:", error);
     }
-    console.log("Submitted values:", values);
   }
 
   return (
@@ -130,7 +127,11 @@ const CreateNewProjectForm: React.FC<CreateNewProjectFormProps> = ({
                 <FormItem>
                   <FormLabel>Project's Name</FormLabel>
                   <FormControl>
-                    <Input placeholder='Name of your new project' {...field} />
+                    <Input
+                      className='text-sm text-slate-50'
+                      placeholder='Name of your new project'
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -156,7 +157,8 @@ const CreateNewProjectForm: React.FC<CreateNewProjectFormProps> = ({
                       <SelectContent>
                         {GENRES.map((genre) => (
                           <SelectItem key={genre} value={genre}>
-                            {genre}
+                            {genre.charAt(0).toUpperCase() +
+                              genre.slice(1).toLowerCase()}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -186,7 +188,8 @@ const CreateNewProjectForm: React.FC<CreateNewProjectFormProps> = ({
                       <SelectContent>
                         {GENRES.map((genre) => (
                           <SelectItem key={genre} value={genre}>
-                            {genre}
+                            {genre.charAt(0).toUpperCase() +
+                              genre.slice(1).toLowerCase()}
                           </SelectItem>
                         ))}
                       </SelectContent>

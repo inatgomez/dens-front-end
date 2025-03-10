@@ -1,6 +1,11 @@
 {
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "jsx": "preserve" // Needed for Next.js development server
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "strictNullChecks": true
   }
 }
