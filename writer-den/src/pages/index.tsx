@@ -11,8 +11,8 @@ export default function HomePage() {
 
   if (isLoading) {
     return (
-      <div className='flex flex-col gap-6'>
-        <Card>
+      <div className='flex flex-col items-center justify-center gap-6'>
+        <Card className='w-44'>
           <CardHeader>
             <CardDescription>Loading sigin page...</CardDescription>
           </CardHeader>
