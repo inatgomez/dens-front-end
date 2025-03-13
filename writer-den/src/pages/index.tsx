@@ -11,12 +11,16 @@ export default function HomePage() {
 
   if (isLoading) {
     return (
-      <div className='flex flex-col items-center justify-center gap-6'>
-        <Card className='w-44'>
-          <CardHeader>
-            <CardDescription>Loading sigin page...</CardDescription>
-          </CardHeader>
-        </Card>
+      <div className='flex min-h-svh w-full items-center justify-center p-6 md:p-10'>
+        <div className='w-full max-w-sm'>
+          <Card>
+            <CardHeader>
+              <CardDescription className='text-xl text-slate-100'>
+                Loading sigin page...
+              </CardDescription>
+            </CardHeader>
+          </Card>
+        </div>
       </div>
     );
   }
