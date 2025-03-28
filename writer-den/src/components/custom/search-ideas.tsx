@@ -96,7 +96,7 @@ export const SearchIdeas = forwardRef<HTMLDivElement, {}>((props, ref) => {
               id='search-input'
               placeholder='Search ideas...'
               onChange={handleSearch}
-              className='flex-1'
+              className='flex-1 text-sm text-slate-50'
             />
             <Select
               value={selectedCategory}
