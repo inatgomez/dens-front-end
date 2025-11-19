@@ -86,3 +86,5 @@ Key aspects of this project:
 - Focused on helping writers tell better stories
 - Serves as an external brain for organizing and retrieving ideas
 - Built with a clean, distraction-free interface to minimize disruptions to the creative process
+
+Read the full case study [here](https://github.com/inatgomez/dens-front-end/blob/main/CASE_STUDY.md)
