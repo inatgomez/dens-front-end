@@ -49,12 +49,12 @@ This project also led me to a new realization: I want to **dive deeper into AI 
 
 **Create a project form**
 
-![New project form](/images/case-studies/writers-den/project-form.png)
+![New project form](./assets/project-form.png)
 
 **Add an idea chat like interface**
 
-![Add a new idea](/images/case-studies/writers-den/new-idea.png)
+![Add a new idea](./assets/new-idea.png)
 
 **Ideas list inside specific project**
 
-![Ideas list per project](/images/case-studies/writers-den/ideas-list.png)
+![Ideas list per project](./assets/ideas-list.png)
