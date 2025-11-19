@@ -86,5 +86,3 @@ Key aspects of this project:
 - Focused on helping writers tell better stories
 - Serves as an external brain for organizing and retrieving ideas
 - Built with a clean, distraction-free interface to minimize disruptions to the creative process
-
-You can read more about the project in [this article](https://www.natgomez.com/projects/writers-den-project/).
